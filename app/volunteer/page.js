@@ -180,7 +180,7 @@ export default function VolunteerForm() {
         <div className={`mt-8 space-y-4 transform transition-all duration-1000 delay-500 ${isVisible ? 'translate-y-0 opacity-100' : 'translate-y-10 opacity-0'}`}>
           <div className="backdrop-blur-lg rounded-xl p-4 border" style={{backgroundColor: 'rgba(255, 255, 255, 0.3)', borderColor: 'rgba(193, 18, 31, 0.2)'}}>
             <h3 className="font-semibold mb-2" style={{color: '#669bbc'}}>What to Expect</h3>
-            <ul className="text-gray-300 text-sm space-y-1">
+            <ul className="text-black text-sm space-y-1">
               <li>• Receive SMS alerts only for emergencies in your area</li>
               <li>• One-tap response system - no complex apps</li>
               <li>• Background verification for community safety</li>

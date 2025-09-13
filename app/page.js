@@ -86,7 +86,7 @@ export default function Home() {
           </div>
 
           {/* Dynamic Stats */}
-          <div className="bg-white/10 backdrop-blur-lg rounded-xl p-4 border border-white/20 mb-8">
+          <div className="backdrop-blur-lg rounded-xl p-4 border mb-8" style={{backgroundColor: 'rgba(255, 255, 255, 0.4)', borderColor: 'rgba(193, 18, 31, 0.2)'}}>
             <div className="grid grid-cols-2 gap-4">
               {stats.map((stat, index) => (
                 <div
