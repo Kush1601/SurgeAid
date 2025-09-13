@@ -20,72 +20,35 @@ export default function VolunteerForm() {
         phone,
         skills,
         subscribed,
-        createdAt: new Date(),
+        createdAt: new Date()
       });
       setSuccess(true);
-      setName("");
-      setPhone("");
-      setSkills("");
-    } catch (e) {
-      console.error("Error adding volunteer: ", e);
+      setName(""); setPhone(""); setSkills("");
+      setTimeout(() => setSuccess(false), 4000);
+    } catch (err) {
+      console.error(err);
       alert("Error saving data.");
     }
     setLoading(false);
   };
 
   return (
-    <main className="flex min-h-screen items-center justify-center bg-gray-100 p-4">
-      <div className="w-full max-w-md bg-white rounded-xl shadow-md p-6">
-        <h1 className="text-2xl font-bold text-center text-blue-600 mb-4">
-          🚨 Volunteer Signup
-        </h1>
+    <main className="flex min-h-screen items-start justify-center bg-gray-50 p-4">
+      <div className="w-full max-w-md bg-white rounded-xl shadow-md p-6 mt-6">
+        <h1 className="text-2xl font-bold text-center text-blue-600 mb-4">Volunteer Signup</h1>
         <form onSubmit={handleSubmit} className="space-y-4">
-          <input
-            type="text"
-            placeholder="Full Name"
-            value={name}
-            onChange={(e) => setName(e.target.value)}
-            required
-            className="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-blue-400"
-          />
-          <input
-            type="tel"
-            placeholder="Phone Number"
-            value={phone}
-            onChange={(e) => setPhone(e.target.value)}
-            required
-            className="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-blue-400"
-          />
-          <input
-            type="text"
-            placeholder="Skills (e.g., Medical, Logistics)"
-            value={skills}
-            onChange={(e) => setSkills(e.target.value)}
-            className="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-blue-400"
-          />
-          <label className="flex items-center space-x-2">
-            <input
-              type="checkbox"
-              checked={subscribed}
-              onChange={(e) => setSubscribed(e.target.checked)}
-              className="h-4 w-4 text-blue-600"
-            />
+          <input value={name} onChange={(e)=>setName(e.target.value)} required placeholder="Full name" className="w-full px-4 py-2 border rounded-lg" />
+          <input value={phone} onChange={(e)=>setPhone(e.target.value)} required placeholder="Phone number (e.g. +1415555...)" className="w-full px-4 py-2 border rounded-lg" />
+          <input value={skills} onChange={(e)=>setSkills(e.target.value)} placeholder="Skills (e.g., medical, logistics)" className="w-full px-4 py-2 border rounded-lg" />
+          <label className="flex items-center gap-3">
+            <input type="checkbox" checked={subscribed} onChange={(e)=>setSubscribed(e.target.checked)} />
             <span className="text-sm">Subscribe to SMS alerts</span>
           </label>
-
-          <button
-            type="submit"
-            disabled={loading}
-            className="w-full bg-blue-600 text-white font-semibold py-2 rounded-lg hover:bg-blue-700 transition"
-          >
+          <button type="submit" disabled={loading} className="w-full py-2 bg-blue-600 text-white rounded-lg">
             {loading ? "Submitting..." : "Sign Up"}
           </button>
         </form>
-        {success && (
-          <p className="text-green-600 text-center mt-4">
-            ✅ You’re signed up as a volunteer!
-          </p>
-        )}
+        {success && <p className="text-green-600 mt-4 text-center">Thanks — you’re signed up!</p>}
       </div>
     </main>
   );
