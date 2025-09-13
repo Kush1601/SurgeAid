@@ -47,10 +47,10 @@ export default function Home() {
           <div className="mb-8">
             <div className="inline-flex items-center gap-3 mb-6">
               <div className="relative">
-                <AlertTriangle className="w-10 h-10 text-red-400 animate-bounce" />
-                <div className="absolute -top-1 -right-1 w-3 h-3 bg-red-500 rounded-full animate-ping"></div>
+                <AlertTriangle className="w-10 h-10 animate-bounce" style={{color: '#ca0013'}} />
+                <div className="absolute -top-1 -right-1 w-3 h-3 rounded-full animate-ping" style={{backgroundColor: '#ca0013'}}></div>
               </div>
-              <h1 className="text-4xl font-black bg-gradient-to-r from-blue-400 via-purple-400 to-pink-400 bg-clip-text text-transparent">
+              <h1 className="text-4xl font-black" style={{color: '#ca0013'}}>
                 SurgeAid
               </h1>
             </div>
@@ -64,19 +64,21 @@ export default function Home() {
           <div className="flex flex-col gap-3 mb-8">
             <a
               href="/volunteer"
-              className="group relative overflow-hidden bg-gradient-to-r from-blue-600 to-blue-700 hover:from-blue-700 hover:to-blue-800 text-white px-6 py-3 rounded-full font-semibold transition-all duration-300 transform hover:scale-105"
+              className="group relative overflow-hidden text-black px-6 py-3 rounded-full font-semibold transition-all duration-300 transform hover:scale-105"
+              style={{backgroundColor: '#fbbf24', boxShadow: '0 4px 14px 0 rgba(251, 191, 36, 0.39)'}}
             >
               <div className="absolute inset-0 bg-gradient-to-r from-white/0 via-white/20 to-white/0 transform -skew-x-12 -translate-x-full group-hover:translate-x-full transition-transform duration-700"></div>
               <span className="relative flex items-center justify-center gap-2">
-                <Heart className="w-4 h-4" />
+                <Heart className="w-4 h-4" style={{color: '#ca0013'}} />
                 Join as Volunteer
-                <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
+                <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" style={{color: '#ca0013'}} />
               </span>
             </a>
 
             <a
               href="/report"
-              className="group relative overflow-hidden bg-gradient-to-r from-red-600 to-orange-600 hover:from-red-700 hover:to-orange-700 text-white px-6 py-3 rounded-full font-semibold transition-all duration-300 transform hover:scale-105"
+              className="group relative overflow-hidden text-white px-6 py-3 rounded-full font-semibold transition-all duration-300 transform hover:scale-105"
+              style={{backgroundColor: '#ca0013', boxShadow: '0 4px 14px 0 rgba(202, 0, 19, 0.39)'}}
             >
               <div className="absolute inset-0 bg-gradient-to-r from-white/0 via-white/20 to-white/0 transform -skew-x-12 -translate-x-full group-hover:translate-x-full transition-transform duration-700"></div>
               <span className="relative flex items-center justify-center gap-2">
@@ -88,13 +90,14 @@ export default function Home() {
 
             <a
               href="/map"
-              className="group relative overflow-hidden bg-gradient-to-r from-purple-600 to-indigo-600 hover:from-purple-700 hover:to-indigo-700 text-white px-6 py-3 rounded-full font-semibold transition-all duration-300 transform hover:scale-105"
+              className="group relative overflow-hidden text-black px-6 py-3 rounded-full font-semibold transition-all duration-300 transform hover:scale-105"
+              style={{backgroundColor: '#fbbf24', boxShadow: '0 4px 14px 0 rgba(251, 191, 36, 0.39)'}}
             >
               <div className="absolute inset-0 bg-gradient-to-r from-white/0 via-white/20 to-white/0 transform -skew-x-12 -translate-x-full group-hover:translate-x-full transition-transform duration-700"></div>
               <span className="relative flex items-center justify-center gap-2">
-                <MapPin className="w-4 h-4" />
+                <MapPin className="w-4 h-4" style={{color: '#ca0013'}} />
                 View Live Map
-                <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
+                <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" style={{color: '#ca0013'}} />
               </span>
             </a>
           </div>
@@ -106,8 +109,9 @@ export default function Home() {
                 <div
                   key={index}
                   className={`text-center transform transition-all duration-500 ${
-                    currentStat === index ? 'scale-110 text-yellow-400' : 'scale-100'
+                    currentStat === index ? 'scale-110' : 'scale-100'
                   }`}
+                  style={{color: currentStat === index ? '#fbbf24' : 'white'}}
                 >
                   <div className="text-xl font-bold">{stat.number}</div>
                   <div className="text-xs text-gray-300">{stat.label}</div>
@@ -119,7 +123,7 @@ export default function Home() {
 
         {/* How it Works Section */}
         <section className={`mb-12 transform transition-all duration-1000 delay-300 ${isVisible ? 'translate-y-0 opacity-100' : 'translate-y-10 opacity-0'}`}>
-          <h2 className="text-2xl font-bold text-center mb-8 bg-gradient-to-r from-blue-400 to-purple-400 bg-clip-text text-transparent">
+          <h2 className="text-2xl font-bold text-center mb-8" style={{color: '#ca0013'}}>
             How SurgeAid Works
           </h2>
 
@@ -156,7 +160,7 @@ export default function Home() {
                     </div>
 
                     <div className="flex-1">
-                      <h3 className="font-bold mb-1 text-white group-hover:text-yellow-400 transition-colors">
+                      <h3 className="font-bold mb-1 text-white group-hover:transition-colors" style={{'--hover-color': '#fbbf24'}} onMouseEnter={(e) => e.target.style.color = '#fbbf24'} onMouseLeave={(e) => e.target.style.color = 'white'}>
                         {step.title}
                       </h3>
 
@@ -178,7 +182,7 @@ export default function Home() {
         {/* Features Section */}
         <section className={`mb-12 transform transition-all duration-1000 delay-500 ${isVisible ? 'translate-y-0 opacity-100' : 'translate-y-10 opacity-0'}`}>
           <div className="bg-gradient-to-r from-white/5 to-white/10 backdrop-blur-lg rounded-xl p-6 border border-white/20">
-            <h3 className="text-xl font-bold text-center mb-6 text-white">Why Choose SurgeAid?</h3>
+            <h3 className="text-xl font-bold text-center mb-6" style={{color: '#fbbf24'}}>Why Choose SurgeAid?</h3>
 
             <div className="grid grid-cols-1 gap-4">
               {[
@@ -205,12 +209,12 @@ export default function Home() {
         <section className={`text-center transform transition-all duration-1000 delay-700 ${isVisible ? 'translate-y-0 opacity-100' : 'translate-y-10 opacity-0'}`}>
           <div className="bg-gradient-to-r from-red-600/20 to-orange-600/20 backdrop-blur-lg rounded-xl p-4 border border-red-500/30">
             <div className="flex items-center justify-center gap-2 mb-3">
-              <div className="w-2 h-2 bg-red-500 rounded-full animate-ping"></div>
-              <span className="text-red-400 font-semibold">LIVE SYSTEM STATUS</span>
-              <div className="w-2 h-2 bg-red-500 rounded-full animate-ping"></div>
+              <div className="w-2 h-2 rounded-full animate-ping" style={{backgroundColor: '#ca0013'}}></div>
+              <span className="font-semibold" style={{color: '#ca0013'}}>LIVE SYSTEM STATUS</span>
+              <div className="w-2 h-2 rounded-full animate-ping" style={{backgroundColor: '#ca0013'}}></div>
             </div>
             <p className="text-white font-medium text-sm">
-              🚨 SurgeAid is monitoring <span className="text-yellow-400 font-bold">12 active incidents</span> across 4 communities
+              🚨 SurgeAid is monitoring <span className="font-bold" style={{color: '#fbbf24'}}>12 active incidents</span> across 4 communities
             </p>
             <p className="text-gray-300 text-xs mt-2">
               Join volunteers making a difference in their neighborhoods

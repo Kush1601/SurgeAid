@@ -101,10 +101,10 @@ export default function ReportPage() {
         <div className={`text-center mb-8 transform transition-all duration-1000 ${isVisible ? 'translate-y-0 opacity-100' : 'translate-y-10 opacity-0'}`}>
           <div className="inline-flex items-center gap-3 mb-4">
             <div className="relative">
-              <AlertTriangle className="w-8 h-8 text-red-400 animate-bounce" />
-              <div className="absolute -top-1 -right-1 w-3 h-3 bg-red-500 rounded-full animate-ping"></div>
+              <AlertTriangle className="w-8 h-8 animate-bounce" style={{color: '#ca0013'}} />
+              <div className="absolute -top-1 -right-1 w-3 h-3 rounded-full animate-ping" style={{backgroundColor: '#ca0013'}}></div>
             </div>
-            <h1 className="text-3xl font-black bg-gradient-to-r from-red-400 via-orange-400 to-yellow-400 bg-clip-text text-transparent">
+            <h1 className="text-3xl font-black" style={{color: '#ca0013'}}>
               Emergency Report
             </h1>
           </div>
@@ -113,14 +113,14 @@ export default function ReportPage() {
             Report emergencies and incidents in your area. Every second counts—help us mobilize volunteers quickly.
           </p>
 
-          <div className="bg-gradient-to-r from-red-600/20 to-orange-600/20 backdrop-blur-lg rounded-xl p-4 border border-red-500/30 mb-6">
+          <div className="backdrop-blur-lg rounded-xl p-4 border mb-6" style={{backgroundColor: 'rgba(202, 0, 19, 0.2)', borderColor: 'rgba(202, 0, 19, 0.3)'}}>
             <div className="flex items-center justify-center gap-2 mb-2">
-              <Target className="w-4 h-4 text-yellow-400" />
-              <span className="text-red-400 font-semibold text-sm">RAPID RESPONSE</span>
-              <Target className="w-4 h-4 text-yellow-400" />
+              <Target className="w-4 h-4" style={{color: '#fbbf24'}} />
+              <span className="font-semibold text-sm" style={{color: '#ca0013'}}>RAPID RESPONSE</span>
+              <Target className="w-4 h-4" style={{color: '#fbbf24'}} />
             </div>
             <p className="text-white text-xs">
-              Reports reach <span className="text-yellow-400 font-bold">150+ volunteers</span> in under 60 seconds
+              Reports reach <span className="font-bold" style={{color: '#fbbf24'}}>150+ volunteers</span> in under 60 seconds
             </p>
           </div>
         </div>
@@ -138,7 +138,9 @@ export default function ReportPage() {
                   value={title}
                   onChange={e=>setTitle(e.target.value)}
                   placeholder="Emergency title (e.g., 'House fire on Main St')"
-                  className="w-full pl-11 pr-4 py-3 bg-white/10 backdrop-blur border border-white/20 rounded-xl text-white placeholder-gray-400 focus:border-red-400 focus:outline-none transition-colors"
+                  className="w-full pl-11 pr-4 py-3 bg-white/10 backdrop-blur border border-white/20 rounded-xl text-white placeholder-gray-400 focus:outline-none transition-colors"
+                  onFocus={(e) => e.target.style.borderColor = '#fbbf24'}
+                  onBlur={(e) => e.target.style.borderColor = 'rgba(255,255,255,0.2)'}
                   required
                 />
               </div>
@@ -153,7 +155,9 @@ export default function ReportPage() {
                   onChange={e=>setDescription(e.target.value)}
                   placeholder="Describe the situation, resources needed, and any immediate dangers..."
                   rows={4}
-                  className="w-full pl-11 pr-4 py-3 bg-white/10 backdrop-blur border border-white/20 rounded-xl text-white placeholder-gray-400 focus:border-red-400 focus:outline-none transition-colors resize-none"
+                  className="w-full pl-11 pr-4 py-3 bg-white/10 backdrop-blur border border-white/20 rounded-xl text-white placeholder-gray-400 focus:outline-none transition-colors resize-none"
+                  onFocus={(e) => e.target.style.borderColor = '#fbbf24'}
+                  onBlur={(e) => e.target.style.borderColor = 'rgba(255,255,255,0.2)'}
                 />
               </div>
 
@@ -168,7 +172,9 @@ export default function ReportPage() {
                       value={lat}
                       onChange={e=>setLat(e.target.value)}
                       placeholder="Latitude"
-                      className="w-full pl-10 pr-4 py-3 bg-white/10 backdrop-blur border border-white/20 rounded-xl text-white placeholder-gray-400 focus:border-red-400 focus:outline-none transition-colors"
+                      className="w-full pl-10 pr-4 py-3 bg-white/10 backdrop-blur border border-white/20 rounded-xl text-white placeholder-gray-400 focus:outline-none transition-colors"
+                      onFocus={(e) => e.target.style.borderColor = '#fbbf24'}
+                      onBlur={(e) => e.target.style.borderColor = 'rgba(255,255,255,0.2)'}
                     />
                   </div>
                   <div className="relative flex-1">
@@ -176,7 +182,9 @@ export default function ReportPage() {
                       value={lng}
                       onChange={e=>setLng(e.target.value)}
                       placeholder="Longitude"
-                      className="w-full px-4 py-3 bg-white/10 backdrop-blur border border-white/20 rounded-xl text-white placeholder-gray-400 focus:border-red-400 focus:outline-none transition-colors"
+                      className="w-full px-4 py-3 bg-white/10 backdrop-blur border border-white/20 rounded-xl text-white placeholder-gray-400 focus:outline-none transition-colors"
+                      onFocus={(e) => e.target.style.borderColor = '#fbbf24'}
+                      onBlur={(e) => e.target.style.borderColor = 'rgba(255,255,255,0.2)'}
                     />
                   </div>
                 </div>
@@ -185,7 +193,8 @@ export default function ReportPage() {
                   type="button"
                   onClick={useGeolocation}
                   disabled={locationLoading}
-                  className="w-full py-3 bg-purple-600/30 hover:bg-purple-600/50 border border-purple-400/30 text-white rounded-xl transition-colors disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2"
+                  className="w-full py-3 text-white rounded-xl transition-colors disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2"
+                  style={{backgroundColor: locationLoading ? 'rgba(156, 163, 175, 0.3)' : 'rgba(251, 191, 36, 0.3)', border: '1px solid rgba(251, 191, 36, 0.3)'}}
                 >
                   {locationLoading ? (
                     <>
@@ -205,7 +214,8 @@ export default function ReportPage() {
               <button
                 type="submit"
                 disabled={loading}
-                className="group w-full relative overflow-hidden bg-gradient-to-r from-red-600 to-orange-600 hover:from-red-700 hover:to-orange-700 disabled:from-gray-600 disabled:to-gray-700 text-white px-6 py-4 rounded-xl font-semibold transition-all duration-300 transform hover:scale-105 disabled:scale-100 disabled:cursor-not-allowed"
+                className="group w-full relative overflow-hidden text-white px-6 py-4 rounded-xl font-semibold transition-all duration-300 transform hover:scale-105 disabled:scale-100 disabled:cursor-not-allowed"
+                style={{backgroundColor: loading ? '#9ca3af' : '#ca0013', boxShadow: loading ? 'none' : '0 4px 14px 0 rgba(202, 0, 19, 0.39)'}}
               >
                 <div className="absolute inset-0 bg-gradient-to-r from-white/0 via-white/20 to-white/0 transform -skew-x-12 -translate-x-full group-hover:translate-x-full transition-transform duration-700"></div>
                 <span className="relative flex items-center justify-center gap-2">
@@ -247,7 +257,7 @@ export default function ReportPage() {
                   <div key={r.id} className="bg-white/5 rounded-xl p-4 border border-white/10 hover:border-white/20 transition-colors">
                     <div className="flex justify-between items-start mb-2">
                       <div className="flex items-center gap-2">
-                        <div className="w-2 h-2 bg-red-500 rounded-full animate-pulse"></div>
+                        <div className="w-2 h-2 rounded-full animate-pulse" style={{backgroundColor: '#ca0013'}}></div>
                         <h4 className="font-semibold text-white text-sm">{r.title}</h4>
                       </div>
                       <div className="flex items-center gap-1 text-xs text-gray-400">
@@ -266,8 +276,8 @@ export default function ReportPage() {
                         {r.lat && r.lng ? `${r.lat}, ${r.lng}` : "Location not provided"}
                       </div>
                       <div className="flex items-center gap-1">
-                        <Zap className="w-3 h-3 text-yellow-400" />
-                        <span className="text-yellow-400">Active</span>
+                        <Zap className="w-3 h-3" style={{color: '#fbbf24'}} />
+                        <span style={{color: '#fbbf24'}}>Active</span>
                       </div>
                     </div>
                   </div>

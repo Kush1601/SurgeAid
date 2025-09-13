@@ -63,10 +63,10 @@ export default function VolunteerForm() {
         <div className={`text-center mb-8 transform transition-all duration-1000 ${isVisible ? 'translate-y-0 opacity-100' : 'translate-y-10 opacity-0'}`}>
           <div className="inline-flex items-center gap-3 mb-4">
             <div className="relative">
-              <Heart className="w-8 h-8 text-red-400 animate-pulse" />
-              <div className="absolute -top-1 -right-1 w-3 h-3 bg-red-500 rounded-full animate-ping"></div>
+              <Heart className="w-8 h-8 animate-pulse" style={{color: '#ca0013'}} />
+              <div className="absolute -top-1 -right-1 w-3 h-3 rounded-full animate-ping" style={{backgroundColor: '#ca0013'}}></div>
             </div>
-            <h1 className="text-3xl font-black bg-gradient-to-r from-blue-400 via-purple-400 to-pink-400 bg-clip-text text-transparent">
+            <h1 className="text-3xl font-black" style={{color: '#ca0013'}}>
               Join Our Heroes
             </h1>
           </div>
@@ -75,14 +75,14 @@ export default function VolunteerForm() {
             Become a certified community responder. Your skills and compassion can save lives when disasters strike.
           </p>
 
-          <div className="bg-gradient-to-r from-green-600/20 to-blue-600/20 backdrop-blur-lg rounded-xl p-4 border border-green-500/30 mb-6">
+          <div className="backdrop-blur-lg rounded-xl p-4 border mb-6" style={{backgroundColor: 'rgba(251, 191, 36, 0.2)', borderColor: 'rgba(251, 191, 36, 0.3)'}}>
             <div className="flex items-center justify-center gap-2 mb-2">
-              <Zap className="w-4 h-4 text-yellow-400" />
-              <span className="text-green-400 font-semibold text-sm">INSTANT IMPACT</span>
-              <Zap className="w-4 h-4 text-yellow-400" />
+              <Zap className="w-4 h-4" style={{color: '#ca0013'}} />
+              <span className="font-semibold text-sm" style={{color: '#ca0013'}}>INSTANT IMPACT</span>
+              <Zap className="w-4 h-4" style={{color: '#ca0013'}} />
             </div>
             <p className="text-white text-xs">
-              Join <span className="text-yellow-400 font-bold">150+ active volunteers</span> making a difference
+              Join <span className="font-bold" style={{color: '#fbbf24'}}>150+ active volunteers</span> making a difference
             </p>
           </div>
         </div>
@@ -101,7 +101,9 @@ export default function VolunteerForm() {
                   onChange={(e)=>setName(e.target.value)}
                   required
                   placeholder="Full name"
-                  className="w-full pl-11 pr-4 py-3 bg-white/10 backdrop-blur border border-white/20 rounded-xl text-white placeholder-gray-400 focus:border-blue-400 focus:outline-none transition-colors"
+                  className="w-full pl-11 pr-4 py-3 bg-white/10 backdrop-blur border border-white/20 rounded-xl text-white placeholder-gray-400 focus:outline-none transition-colors"
+                  onFocus={(e) => e.target.style.borderColor = '#fbbf24'}
+                  onBlur={(e) => e.target.style.borderColor = 'rgba(255,255,255,0.2)'}
                 />
               </div>
 
@@ -115,7 +117,9 @@ export default function VolunteerForm() {
                   onChange={(e)=>setPhone(e.target.value)}
                   required
                   placeholder="Phone number (e.g. +1415555...)"
-                  className="w-full pl-11 pr-4 py-3 bg-white/10 backdrop-blur border border-white/20 rounded-xl text-white placeholder-gray-400 focus:border-blue-400 focus:outline-none transition-colors"
+                  className="w-full pl-11 pr-4 py-3 bg-white/10 backdrop-blur border border-white/20 rounded-xl text-white placeholder-gray-400 focus:outline-none transition-colors"
+                  onFocus={(e) => e.target.style.borderColor = '#fbbf24'}
+                  onBlur={(e) => e.target.style.borderColor = 'rgba(255,255,255,0.2)'}
                 />
               </div>
 
@@ -129,20 +133,23 @@ export default function VolunteerForm() {
                   onChange={(e)=>setSkills(e.target.value)}
                   placeholder="Skills & experience (e.g., medical training, logistics, search & rescue, tech support)"
                   rows={3}
-                  className="w-full pl-11 pr-4 py-3 bg-white/10 backdrop-blur border border-white/20 rounded-xl text-white placeholder-gray-400 focus:border-blue-400 focus:outline-none transition-colors resize-none"
+                  className="w-full pl-11 pr-4 py-3 bg-white/10 backdrop-blur border border-white/20 rounded-xl text-white placeholder-gray-400 focus:outline-none transition-colors resize-none"
+                  onFocus={(e) => e.target.style.borderColor = '#fbbf24'}
+                  onBlur={(e) => e.target.style.borderColor = 'rgba(255,255,255,0.2)'}
                 />
               </div>
 
               {/* SMS Subscription */}
-              <div className="flex items-center gap-3 p-4 bg-blue-600/20 rounded-xl border border-blue-400/30">
+              <div className="flex items-center gap-3 p-4 rounded-xl border" style={{backgroundColor: 'rgba(202, 0, 19, 0.2)', borderColor: 'rgba(202, 0, 19, 0.3)'}}>
                 <input
                   type="checkbox"
                   id="sms-alerts"
                   checked={subscribed}
                   onChange={(e)=>setSubscribed(e.target.checked)}
-                  className="w-4 h-4 rounded border-2 border-blue-400 bg-transparent checked:bg-blue-500 focus:ring-blue-400"
+                  className="w-4 h-4 rounded border-2 bg-transparent"
+                  style={{borderColor: '#ca0013', backgroundColor: subscribed ? '#ca0013' : 'transparent'}}
                 />
-                <label htmlFor="sms-alerts" className="text-sm text-blue-200 flex items-center gap-2">
+                <label htmlFor="sms-alerts" className="text-sm flex items-center gap-2" style={{color: '#fbbf24'}}>
                   <AlertTriangle className="w-4 h-4" />
                   Subscribe to emergency SMS alerts in my area
                 </label>
@@ -152,7 +159,8 @@ export default function VolunteerForm() {
               <button
                 type="submit"
                 disabled={loading}
-                className="group w-full relative overflow-hidden bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 disabled:from-gray-600 disabled:to-gray-700 text-white px-6 py-4 rounded-xl font-semibold transition-all duration-300 transform hover:scale-105 disabled:scale-100 disabled:cursor-not-allowed"
+                className="group w-full relative overflow-hidden text-black px-6 py-4 rounded-xl font-semibold transition-all duration-300 transform hover:scale-105 disabled:scale-100 disabled:cursor-not-allowed"
+                style={{backgroundColor: loading ? '#9ca3af' : '#fbbf24', boxShadow: loading ? 'none' : '0 4px 14px 0 rgba(251, 191, 36, 0.39)'}}
               >
                 <div className="absolute inset-0 bg-gradient-to-r from-white/0 via-white/20 to-white/0 transform -skew-x-12 -translate-x-full group-hover:translate-x-full transition-transform duration-700"></div>
                 <span className="relative flex items-center justify-center gap-2">
@@ -163,7 +171,7 @@ export default function VolunteerForm() {
                     </>
                   ) : (
                     <>
-                      <Heart className="w-5 h-5" />
+                      <Heart className="w-5 h-5" style={{color: '#ca0013'}} />
                       Join as Volunteer Hero
                     </>
                   )}
@@ -189,7 +197,7 @@ export default function VolunteerForm() {
         {/* Info Cards */}
         <div className={`mt-8 space-y-4 transform transition-all duration-1000 delay-500 ${isVisible ? 'translate-y-0 opacity-100' : 'translate-y-10 opacity-0'}`}>
           <div className="bg-white/5 backdrop-blur-lg rounded-xl p-4 border border-white/10">
-            <h3 className="font-semibold text-yellow-400 mb-2">What to Expect</h3>
+            <h3 className="font-semibold mb-2" style={{color: '#fbbf24'}}>What to Expect</h3>
             <ul className="text-gray-300 text-sm space-y-1">
               <li>• Receive SMS alerts only for emergencies in your area</li>
               <li>• One-tap response system - no complex apps</li>

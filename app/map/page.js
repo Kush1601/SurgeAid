@@ -40,10 +40,10 @@ export default function MapPage() {
         <div className={`text-center mb-8 transform transition-all duration-1000 ${isVisible ? 'translate-y-0 opacity-100' : 'translate-y-10 opacity-0'}`}>
           <div className="inline-flex items-center gap-3 mb-4">
             <div className="relative">
-              <MapPin className="w-8 h-8 text-purple-400 animate-pulse" />
-              <div className="absolute -top-1 -right-1 w-3 h-3 bg-purple-500 rounded-full animate-ping"></div>
+              <MapPin className="w-8 h-8 animate-pulse" style={{color: '#ca0013'}} />
+              <div className="absolute -top-1 -right-1 w-3 h-3 rounded-full animate-ping" style={{backgroundColor: '#ca0013'}}></div>
             </div>
-            <h1 className="text-3xl font-black bg-gradient-to-r from-purple-400 via-blue-400 to-cyan-400 bg-clip-text text-transparent">
+            <h1 className="text-3xl font-black" style={{color: '#ca0013'}}>
               Live Response Map
             </h1>
           </div>
@@ -52,11 +52,11 @@ export default function MapPage() {
             Real-time view of active incidents and volunteer responses in your area.
           </p>
 
-          <div className="bg-gradient-to-r from-purple-600/20 to-blue-600/20 backdrop-blur-lg rounded-xl p-4 border border-purple-500/30 mb-6">
+          <div className="backdrop-blur-lg rounded-xl p-4 border mb-6" style={{backgroundColor: 'rgba(202, 0, 19, 0.2)', borderColor: 'rgba(202, 0, 19, 0.3)'}}>
             <div className="flex items-center justify-center gap-2 mb-2">
-              <Zap className="w-4 h-4 text-yellow-400" />
-              <span className="text-purple-400 font-semibold text-sm">REAL-TIME TRACKING</span>
-              <Zap className="w-4 h-4 text-yellow-400" />
+              <Zap className="w-4 h-4" style={{color: '#fbbf24'}} />
+              <span className="font-semibold text-sm" style={{color: '#ca0013'}}>REAL-TIME TRACKING</span>
+              <Zap className="w-4 h-4" style={{color: '#fbbf24'}} />
             </div>
             <p className="text-white text-xs">
               Blue markers = USGS events • Red markers = community reports
@@ -82,11 +82,11 @@ export default function MapPage() {
             </div>
             <div className="grid grid-cols-2 gap-4">
               <div className="text-center">
-                <div className="text-2xl font-bold text-red-400">3</div>
+                <div className="text-2xl font-bold" style={{color: '#ca0013'}}>3</div>
                 <div className="text-xs text-gray-400">High Priority</div>
               </div>
               <div className="text-center">
-                <div className="text-2xl font-bold text-yellow-400">9</div>
+                <div className="text-2xl font-bold" style={{color: '#fbbf24'}}>9</div>
                 <div className="text-xs text-gray-400">Standard</div>
               </div>
             </div>
@@ -99,11 +99,11 @@ export default function MapPage() {
             </div>
             <div className="grid grid-cols-2 gap-4">
               <div className="text-center">
-                <div className="text-2xl font-bold text-green-400">45s</div>
+                <div className="text-2xl font-bold" style={{color: '#fbbf24'}}>45s</div>
                 <div className="text-xs text-gray-400">Avg Response</div>
               </div>
               <div className="text-center">
-                <div className="text-2xl font-bold text-blue-400">87</div>
+                <div className="text-2xl font-bold" style={{color: '#ca0013'}}>87</div>
                 <div className="text-xs text-gray-400">Active Volunteers</div>
               </div>
             </div>

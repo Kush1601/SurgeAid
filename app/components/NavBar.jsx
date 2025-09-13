@@ -18,10 +18,10 @@ export default function NavBar() {
         {/* Logo - Compact Mobile Version */}
         <Link href="/" className="flex items-center gap-2 group min-w-0">
           <div className="relative flex-shrink-0">
-            <AlertTriangle className="w-5 h-5 text-red-500 group-hover:animate-pulse transition-all" />
-            <div className="absolute -top-0.5 -right-0.5 w-1.5 h-1.5 bg-red-500 rounded-full animate-ping"></div>
+            <AlertTriangle className="w-5 h-5 group-hover:animate-pulse transition-all" style={{color: '#ca0013'}} />
+            <div className="absolute -top-0.5 -right-0.5 w-1.5 h-1.5 rounded-full animate-ping" style={{backgroundColor: '#ca0013'}}></div>
           </div>
-          <span className="text-lg font-bold text-blue-600 truncate">
+          <span className="text-lg font-bold truncate" style={{color: '#ca0013'}}>
             SurgeAid
           </span>
         </Link>
@@ -38,20 +38,24 @@ export default function NavBar() {
                 href={item.href}
                 className={`group relative px-2 py-1.5 text-xs rounded-md font-medium transition-all duration-200 ${
                   isActive
-                    ? "bg-blue-50 text-blue-600 shadow-sm"
-                    : "text-gray-600 hover:text-blue-600 hover:bg-gray-50"
+                    ? "shadow-sm"
+                    : "text-gray-600 hover:bg-gray-50"
                 }`}
+                style={{
+                  backgroundColor: isActive ? '#fef3c7' : undefined,
+                  color: isActive ? '#ca0013' : undefined
+                }}
               >
                 <div className="flex flex-col items-center gap-0.5 min-w-0">
                   <Icon className={`w-4 h-4 flex-shrink-0 ${
-                    isActive ? "text-blue-600" : "text-gray-500 group-hover:text-blue-600"
-                  }`} />
+                    isActive ? "" : "text-gray-500"
+                  }`} style={{color: isActive ? '#ca0013' : undefined}} />
                   <span className="truncate leading-none">{item.label}</span>
                 </div>
 
                 {/* Active indicator - Mobile style */}
                 {isActive && (
-                  <div className="absolute -bottom-0.5 left-1/2 transform -translate-x-1/2 w-4 h-0.5 bg-blue-600 rounded-full"></div>
+                  <div className="absolute -bottom-0.5 left-1/2 transform -translate-x-1/2 w-4 h-0.5 rounded-full" style={{backgroundColor: '#ca0013'}}></div>
                 )}
               </Link>
             );
