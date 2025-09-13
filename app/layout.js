@@ -1,4 +1,5 @@
 import "./globals.css";
+import "leaflet/dist/leaflet.css";
 import NavBar from "./components/NavBar";
 
 export const metadata = {
