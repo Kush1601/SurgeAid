@@ -40,23 +40,6 @@ export default function VolunteerForm() {
 
   return (
     <div className="min-h-screen text-black -mx-4 -my-4" style={{backgroundColor: '#fdf0d5'}}>
-      {/* Animated background particles */}
-      <div className="absolute inset-0">
-        {[...Array(15)].map((_, i) => (
-          <div
-            key={i}
-            className="absolute animate-pulse opacity-20"
-            style={{
-              left: `${Math.random() * 100}%`,
-              top: `${Math.random() * 100}%`,
-              animationDelay: `${Math.random() * 2}s`,
-              animationDuration: `${3 + Math.random() * 2}s`
-            }}
-          >
-            <div className="w-2 h-2 bg-blue-400 rounded-full"></div>
-          </div>
-        ))}
-      </div>
 
       <div className="relative z-10 max-w-xl mx-auto px-4 py-8">
         {/* Header Section */}
@@ -89,7 +72,7 @@ export default function VolunteerForm() {
 
         {/* Form Section */}
         <div className={`transform transition-all duration-1000 delay-300 ${isVisible ? 'translate-y-0 opacity-100' : 'translate-y-10 opacity-0'}`}>
-          <div className="bg-white/10 backdrop-blur-lg rounded-2xl p-6 border border-white/20">
+          <div className="backdrop-blur-lg rounded-2xl p-6 border" style={{backgroundColor: 'rgba(255, 255, 255, 0.4)', borderColor: 'rgba(193, 18, 31, 0.2)'}}>
             <form onSubmit={handleSubmit} className="space-y-5">
               {/* Name Field */}
               <div className="relative">
@@ -140,16 +123,16 @@ export default function VolunteerForm() {
               </div>
 
               {/* SMS Subscription */}
-              <div className="flex items-center gap-3 p-4 rounded-xl border" style={{backgroundColor: 'rgba(202, 0, 19, 0.2)', borderColor: 'rgba(202, 0, 19, 0.3)'}}>
+              <div className="flex items-center gap-3 p-4 rounded-xl border" style={{backgroundColor: 'rgba(193, 18, 31, 0.1)', borderColor: 'rgba(193, 18, 31, 0.3)'}}>
                 <input
                   type="checkbox"
                   id="sms-alerts"
                   checked={subscribed}
                   onChange={(e)=>setSubscribed(e.target.checked)}
                   className="w-4 h-4 rounded border-2 bg-transparent"
-                  style={{borderColor: '#ca0013', backgroundColor: subscribed ? '#ca0013' : 'transparent'}}
+                  style={{borderColor: '#c1121f', backgroundColor: subscribed ? '#c1121f' : 'transparent'}}
                 />
-                <label htmlFor="sms-alerts" className="text-sm flex items-center gap-2" style={{color: '#fbbf24'}}>
+                <label htmlFor="sms-alerts" className="text-sm flex items-center gap-2 text-black">
                   <AlertTriangle className="w-4 h-4" />
                   Subscribe to emergency SMS alerts in my area
                 </label>
@@ -195,8 +178,8 @@ export default function VolunteerForm() {
 
         {/* Info Cards */}
         <div className={`mt-8 space-y-4 transform transition-all duration-1000 delay-500 ${isVisible ? 'translate-y-0 opacity-100' : 'translate-y-10 opacity-0'}`}>
-          <div className="bg-white/5 backdrop-blur-lg rounded-xl p-4 border border-white/10">
-            <h3 className="font-semibold mb-2" style={{color: '#fbbf24'}}>What to Expect</h3>
+          <div className="backdrop-blur-lg rounded-xl p-4 border" style={{backgroundColor: 'rgba(255, 255, 255, 0.3)', borderColor: 'rgba(193, 18, 31, 0.2)'}}>
+            <h3 className="font-semibold mb-2" style={{color: '#669bbc'}}>What to Expect</h3>
             <ul className="text-gray-300 text-sm space-y-1">
               <li>• Receive SMS alerts only for emergencies in your area</li>
               <li>• One-tap response system - no complex apps</li>

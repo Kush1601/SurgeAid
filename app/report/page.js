@@ -77,7 +77,7 @@ export default function ReportPage() {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-blue-900 via-purple-900 to-indigo-900 text-white -mx-4 -my-4">
+    <div className="min-h-screen text-black -mx-4 -my-4" style={{backgroundColor: '#fdf0d5'}}>
       {/* Animated background particles */}
       <div className="absolute inset-0">
         {[...Array(15)].map((_, i) => (
@@ -101,33 +101,33 @@ export default function ReportPage() {
         <div className={`text-center mb-8 transform transition-all duration-1000 ${isVisible ? 'translate-y-0 opacity-100' : 'translate-y-10 opacity-0'}`}>
           <div className="inline-flex items-center gap-3 mb-4">
             <div className="relative">
-              <AlertTriangle className="w-8 h-8 animate-bounce" style={{color: '#ca0013'}} />
-              <div className="absolute -top-1 -right-1 w-3 h-3 rounded-full animate-ping" style={{backgroundColor: '#ca0013'}}></div>
+              <AlertTriangle className="w-8 h-8 animate-bounce" style={{color: '#c1121f'}} />
+              <div className="absolute -top-1 -right-1 w-3 h-3 rounded-full animate-ping" style={{backgroundColor: '#c1121f'}}></div>
             </div>
-            <h1 className="text-3xl font-black" style={{color: '#ca0013'}}>
+            <h1 className="text-3xl font-black" style={{color: '#c1121f'}}>
               Emergency Report
             </h1>
           </div>
 
-          <p className="text-gray-300 text-sm mb-6 leading-relaxed">
+          <p className="text-black text-sm mb-6 leading-relaxed">
             Report emergencies and incidents in your area. Every second counts—help us mobilize volunteers quickly.
           </p>
 
-          <div className="backdrop-blur-lg rounded-xl p-4 border mb-6" style={{backgroundColor: 'rgba(202, 0, 19, 0.2)', borderColor: 'rgba(202, 0, 19, 0.3)'}}>
+          <div className="backdrop-blur-lg rounded-xl p-4 border mb-6" style={{backgroundColor: 'rgba(193, 18, 31, 0.1)', borderColor: 'rgba(193, 18, 31, 0.3)'}}>
             <div className="flex items-center justify-center gap-2 mb-2">
               <Target className="w-4 h-4" style={{color: '#fbbf24'}} />
-              <span className="font-semibold text-sm" style={{color: '#ca0013'}}>RAPID RESPONSE</span>
+              <span className="font-semibold text-sm" style={{color: '#c1121f'}}>RAPID RESPONSE</span>
               <Target className="w-4 h-4" style={{color: '#fbbf24'}} />
             </div>
-            <p className="text-white text-xs">
-              Reports reach <span className="font-bold" style={{color: '#fbbf24'}}>150+ volunteers</span> in under 60 seconds
+            <p className="text-black text-xs">
+              Reports reach <span className="font-bold" style={{color: '#c1121f'}}>150+ volunteers</span> in under 60 seconds
             </p>
           </div>
         </div>
 
         {/* Report Form */}
         <div className={`mb-8 transform transition-all duration-1000 delay-300 ${isVisible ? 'translate-y-0 opacity-100' : 'translate-y-10 opacity-0'}`}>
-          <div className="bg-white/10 backdrop-blur-lg rounded-2xl p-6 border border-white/20">
+          <div className="backdrop-blur-lg rounded-2xl p-6 border" style={{backgroundColor: 'rgba(255, 255, 255, 0.4)', borderColor: 'rgba(193, 18, 31, 0.2)'}}>
             <form onSubmit={handleSubmit} className="space-y-5">
               {/* Title Field */}
               <div className="relative">
@@ -138,9 +138,9 @@ export default function ReportPage() {
                   value={title}
                   onChange={e=>setTitle(e.target.value)}
                   placeholder="Emergency title (e.g., 'House fire on Main St')"
-                  className="w-full pl-11 pr-4 py-3 bg-white/10 backdrop-blur border border-white/20 rounded-xl text-white placeholder-gray-400 focus:outline-none transition-colors"
-                  onFocus={(e) => e.target.style.borderColor = '#fbbf24'}
-                  onBlur={(e) => e.target.style.borderColor = 'rgba(255,255,255,0.2)'}
+                  className="w-full pl-11 pr-4 py-3 bg-white/20 backdrop-blur border border-gray-300 rounded-xl text-black placeholder-gray-500 focus:outline-none transition-colors"
+                  onFocus={(e) => e.target.style.borderColor = '#c1121f'}
+                  onBlur={(e) => e.target.style.borderColor = 'rgb(209 213 219)'}
                   required
                 />
               </div>
@@ -155,9 +155,9 @@ export default function ReportPage() {
                   onChange={e=>setDescription(e.target.value)}
                   placeholder="Describe the situation, resources needed, and any immediate dangers..."
                   rows={4}
-                  className="w-full pl-11 pr-4 py-3 bg-white/10 backdrop-blur border border-white/20 rounded-xl text-white placeholder-gray-400 focus:outline-none transition-colors resize-none"
-                  onFocus={(e) => e.target.style.borderColor = '#fbbf24'}
-                  onBlur={(e) => e.target.style.borderColor = 'rgba(255,255,255,0.2)'}
+                  className="w-full pl-11 pr-4 py-3 bg-white/20 backdrop-blur border border-gray-300 rounded-xl text-black placeholder-gray-500 focus:outline-none transition-colors resize-none"
+                  onFocus={(e) => e.target.style.borderColor = '#c1121f'}
+                  onBlur={(e) => e.target.style.borderColor = 'rgb(209 213 219)'}
                 />
               </div>
 
@@ -172,9 +172,9 @@ export default function ReportPage() {
                       value={lat}
                       onChange={e=>setLat(e.target.value)}
                       placeholder="Latitude"
-                      className="w-full pl-10 pr-4 py-3 bg-white/10 backdrop-blur border border-white/20 rounded-xl text-white placeholder-gray-400 focus:outline-none transition-colors"
-                      onFocus={(e) => e.target.style.borderColor = '#fbbf24'}
-                      onBlur={(e) => e.target.style.borderColor = 'rgba(255,255,255,0.2)'}
+                      className="w-full pl-10 pr-4 py-3 bg-white/20 backdrop-blur border border-gray-300 rounded-xl text-black placeholder-gray-500 focus:outline-none transition-colors"
+                      onFocus={(e) => e.target.style.borderColor = '#c1121f'}
+                      onBlur={(e) => e.target.style.borderColor = 'rgb(209 213 219)'}
                     />
                   </div>
                   <div className="relative flex-1">
@@ -182,9 +182,9 @@ export default function ReportPage() {
                       value={lng}
                       onChange={e=>setLng(e.target.value)}
                       placeholder="Longitude"
-                      className="w-full px-4 py-3 bg-white/10 backdrop-blur border border-white/20 rounded-xl text-white placeholder-gray-400 focus:outline-none transition-colors"
-                      onFocus={(e) => e.target.style.borderColor = '#fbbf24'}
-                      onBlur={(e) => e.target.style.borderColor = 'rgba(255,255,255,0.2)'}
+                      className="w-full px-4 py-3 bg-white/20 backdrop-blur border border-gray-300 rounded-xl text-black placeholder-gray-500 focus:outline-none transition-colors"
+                      onFocus={(e) => e.target.style.borderColor = '#c1121f'}
+                      onBlur={(e) => e.target.style.borderColor = 'rgb(209 213 219)'}
                     />
                   </div>
                 </div>
@@ -193,7 +193,7 @@ export default function ReportPage() {
                   type="button"
                   onClick={useGeolocation}
                   disabled={locationLoading}
-                  className="w-full py-3 bg-purple-600/30 hover:bg-purple-600/50 border border-purple-400/30 text-white rounded-xl transition-colors disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2"
+                  className="w-full py-3 bg-white/30 hover:bg-white/50 border border-gray-300 text-black rounded-xl transition-colors disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2"
                 >
                   {locationLoading ? (
                     <>
@@ -237,10 +237,10 @@ export default function ReportPage() {
 
         {/* Recent Reports */}
         <div className={`transform transition-all duration-1000 delay-500 ${isVisible ? 'translate-y-0 opacity-100' : 'translate-y-10 opacity-0'}`}>
-          <div className="bg-white/10 backdrop-blur-lg rounded-2xl p-6 border border-white/20">
+          <div className="backdrop-blur-lg rounded-2xl p-6 border" style={{backgroundColor: 'rgba(255, 255, 255, 0.4)', borderColor: 'rgba(193, 18, 31, 0.2)'}}>
             <div className="flex items-center gap-2 mb-4">
               <Clock className="w-5 h-5 text-blue-400" />
-              <h3 className="font-semibold text-white">Live Incident Feed</h3>
+              <h3 className="font-semibold text-black">Live Incident Feed</h3>
               <div className="w-2 h-2 bg-red-500 rounded-full animate-ping ml-auto"></div>
             </div>
 
@@ -257,7 +257,7 @@ export default function ReportPage() {
                     <div className="flex justify-between items-start mb-2">
                       <div className="flex items-center gap-2">
                         <div className="w-2 h-2 rounded-full animate-pulse" style={{backgroundColor: '#ca0013'}}></div>
-                        <h4 className="font-semibold text-white text-sm">{r.title}</h4>
+                        <h4 className="font-semibold text-black text-sm">{r.title}</h4>
                       </div>
                       <div className="flex items-center gap-1 text-xs text-gray-400">
                         <Clock className="w-3 h-3" />
@@ -266,10 +266,10 @@ export default function ReportPage() {
                     </div>
 
                     {r.description && (
-                      <p className="text-gray-300 text-sm mb-2 leading-relaxed">{r.description}</p>
+                      <p className="text-gray-700 text-sm mb-2 leading-relaxed">{r.description}</p>
                     )}
 
-                    <div className="flex items-center gap-4 text-xs text-gray-400">
+                    <div className="flex items-center gap-4 text-xs text-gray-600">
                       <div className="flex items-center gap-1">
                         <MapPin className="w-3 h-3" />
                         {r.lat && r.lng ? `${r.lat}, ${r.lng}` : "Location not provided"}

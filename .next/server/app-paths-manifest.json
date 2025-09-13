@@ -1,6 +1,6 @@
 {
   "/page": "app/page.js",
   "/volunteer/page": "app/volunteer/page.js",
-  "/report/page": "app/report/page.js",
-  "/map/page": "app/map/page.js"
+  "/map/page": "app/map/page.js",
+  "/report/page": "app/report/page.js"
 }
