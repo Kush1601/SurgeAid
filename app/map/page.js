@@ -1,6 +1,7 @@
-"use client"; // 👈 mark this as client component
-
+"use client";
+import { useState, useEffect } from "react";
 import dynamic from "next/dynamic";
+import { MapPin, Zap, AlertTriangle, Clock } from 'lucide-react';
 
 // dynamically import MapDisasters, disable SSR
 const MapDisasters = dynamic(() => import("../components/MapDisasters"), {
@@ -8,16 +9,107 @@ const MapDisasters = dynamic(() => import("../components/MapDisasters"), {
 });
 
 export default function MapPage() {
+  const [isVisible, setIsVisible] = useState(false);
+
+  useEffect(() => {
+    setIsVisible(true);
+  }, []);
+
   return (
-    <div className="space-y-4">
-      <div className="bg-white p-4 rounded-xl shadow">
-        <h2 className="font-semibold">Nearby Disasters (USGS feed + Reports)</h2>
-        <p className="text-sm text-gray-500 mt-1">
-          Blue markers = public USGS events • Red markers = community reports
-        </p>
+    <div className="min-h-screen bg-gradient-to-br from-blue-900 via-purple-900 to-indigo-900 text-white -mx-4 -my-4">
+      {/* Animated background particles */}
+      <div className="absolute inset-0">
+        {[...Array(15)].map((_, i) => (
+          <div
+            key={i}
+            className="absolute animate-pulse opacity-20"
+            style={{
+              left: `${Math.random() * 100}%`,
+              top: `${Math.random() * 100}%`,
+              animationDelay: `${Math.random() * 2}s`,
+              animationDuration: `${3 + Math.random() * 2}s`
+            }}
+          >
+            <div className="w-2 h-2 bg-purple-400 rounded-full"></div>
+          </div>
+        ))}
       </div>
 
-      <MapDisasters center={[39.2904, -76.6122]} zoom={6} />
+      <div className="relative z-10 max-w-xl mx-auto px-4 py-8">
+        {/* Header Section */}
+        <div className={`text-center mb-8 transform transition-all duration-1000 ${isVisible ? 'translate-y-0 opacity-100' : 'translate-y-10 opacity-0'}`}>
+          <div className="inline-flex items-center gap-3 mb-4">
+            <div className="relative">
+              <MapPin className="w-8 h-8 text-purple-400 animate-pulse" />
+              <div className="absolute -top-1 -right-1 w-3 h-3 bg-purple-500 rounded-full animate-ping"></div>
+            </div>
+            <h1 className="text-3xl font-black bg-gradient-to-r from-purple-400 via-blue-400 to-cyan-400 bg-clip-text text-transparent">
+              Live Response Map
+            </h1>
+          </div>
+
+          <p className="text-gray-300 text-sm mb-6 leading-relaxed">
+            Real-time view of active incidents and volunteer responses in your area.
+          </p>
+
+          <div className="bg-gradient-to-r from-purple-600/20 to-blue-600/20 backdrop-blur-lg rounded-xl p-4 border border-purple-500/30 mb-6">
+            <div className="flex items-center justify-center gap-2 mb-2">
+              <Zap className="w-4 h-4 text-yellow-400" />
+              <span className="text-purple-400 font-semibold text-sm">REAL-TIME TRACKING</span>
+              <Zap className="w-4 h-4 text-yellow-400" />
+            </div>
+            <p className="text-white text-xs">
+              Blue markers = USGS events • Red markers = community reports
+            </p>
+          </div>
+        </div>
+
+        {/* Map Section */}
+        <div className={`mb-8 transform transition-all duration-1000 delay-300 ${isVisible ? 'translate-y-0 opacity-100' : 'translate-y-10 opacity-0'}`}>
+          <div className="bg-white/10 backdrop-blur-lg rounded-2xl p-4 border border-white/20">
+            <div className="bg-white rounded-xl overflow-hidden">
+              <MapDisasters center={[39.2904, -76.6122]} zoom={6} />
+            </div>
+          </div>
+        </div>
+
+        {/* Status Cards */}
+        <div className={`space-y-4 transform transition-all duration-1000 delay-500 ${isVisible ? 'translate-y-0 opacity-100' : 'translate-y-10 opacity-0'}`}>
+          <div className="bg-white/5 backdrop-blur-lg rounded-xl p-4 border border-white/10">
+            <div className="flex items-center gap-3 mb-3">
+              <AlertTriangle className="w-5 h-5 text-red-400" />
+              <h3 className="font-semibold text-white">Current Incidents</h3>
+            </div>
+            <div className="grid grid-cols-2 gap-4">
+              <div className="text-center">
+                <div className="text-2xl font-bold text-red-400">3</div>
+                <div className="text-xs text-gray-400">High Priority</div>
+              </div>
+              <div className="text-center">
+                <div className="text-2xl font-bold text-yellow-400">9</div>
+                <div className="text-xs text-gray-400">Standard</div>
+              </div>
+            </div>
+          </div>
+
+          <div className="bg-white/5 backdrop-blur-lg rounded-xl p-4 border border-white/10">
+            <div className="flex items-center gap-3 mb-3">
+              <Clock className="w-5 h-5 text-blue-400" />
+              <h3 className="font-semibold text-white">Response Status</h3>
+            </div>
+            <div className="grid grid-cols-2 gap-4">
+              <div className="text-center">
+                <div className="text-2xl font-bold text-green-400">45s</div>
+                <div className="text-xs text-gray-400">Avg Response</div>
+              </div>
+              <div className="text-center">
+                <div className="text-2xl font-bold text-blue-400">87</div>
+                <div className="text-xs text-gray-400">Active Volunteers</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
     </div>
   );
 }

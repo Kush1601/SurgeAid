@@ -1,7 +1,8 @@
 "use client";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { db } from "../../lib/firebase";
 import { collection, addDoc } from "firebase/firestore";
+import { Heart, Phone, User, Zap, CheckCircle, AlertTriangle } from 'lucide-react';
 
 export default function VolunteerForm() {
   const [name, setName] = useState("");
@@ -10,6 +11,11 @@ export default function VolunteerForm() {
   const [subscribed, setSubscribed] = useState(true);
   const [loading, setLoading] = useState(false);
   const [success, setSuccess] = useState(false);
+  const [isVisible, setIsVisible] = useState(false);
+
+  useEffect(() => {
+    setIsVisible(true);
+  }, []);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -33,23 +39,166 @@ export default function VolunteerForm() {
   };
 
   return (
-    <main className="flex min-h-screen items-start justify-center bg-gray-50 p-4">
-      <div className="w-full max-w-md bg-white rounded-xl shadow-md p-6 mt-6">
-        <h1 className="text-2xl font-bold text-center text-blue-600 mb-4">Volunteer Signup</h1>
-        <form onSubmit={handleSubmit} className="space-y-4">
-          <input value={name} onChange={(e)=>setName(e.target.value)} required placeholder="Full name" className="w-full px-4 py-2 border rounded-lg" />
-          <input value={phone} onChange={(e)=>setPhone(e.target.value)} required placeholder="Phone number (e.g. +1415555...)" className="w-full px-4 py-2 border rounded-lg" />
-          <input value={skills} onChange={(e)=>setSkills(e.target.value)} placeholder="Skills (e.g., medical, logistics)" className="w-full px-4 py-2 border rounded-lg" />
-          <label className="flex items-center gap-3">
-            <input type="checkbox" checked={subscribed} onChange={(e)=>setSubscribed(e.target.checked)} />
-            <span className="text-sm">Subscribe to SMS alerts</span>
-          </label>
-          <button type="submit" disabled={loading} className="w-full py-2 bg-blue-600 text-white rounded-lg">
-            {loading ? "Submitting..." : "Sign Up"}
-          </button>
-        </form>
-        {success && <p className="text-green-600 mt-4 text-center">Thanks — you’re signed up!</p>}
+    <div className="min-h-screen bg-gradient-to-br from-blue-900 via-purple-900 to-indigo-900 text-white -mx-4 -my-4">
+      {/* Animated background particles */}
+      <div className="absolute inset-0">
+        {[...Array(15)].map((_, i) => (
+          <div
+            key={i}
+            className="absolute animate-pulse opacity-20"
+            style={{
+              left: `${Math.random() * 100}%`,
+              top: `${Math.random() * 100}%`,
+              animationDelay: `${Math.random() * 2}s`,
+              animationDuration: `${3 + Math.random() * 2}s`
+            }}
+          >
+            <div className="w-2 h-2 bg-blue-400 rounded-full"></div>
+          </div>
+        ))}
       </div>
-    </main>
+
+      <div className="relative z-10 max-w-xl mx-auto px-4 py-8">
+        {/* Header Section */}
+        <div className={`text-center mb-8 transform transition-all duration-1000 ${isVisible ? 'translate-y-0 opacity-100' : 'translate-y-10 opacity-0'}`}>
+          <div className="inline-flex items-center gap-3 mb-4">
+            <div className="relative">
+              <Heart className="w-8 h-8 text-red-400 animate-pulse" />
+              <div className="absolute -top-1 -right-1 w-3 h-3 bg-red-500 rounded-full animate-ping"></div>
+            </div>
+            <h1 className="text-3xl font-black bg-gradient-to-r from-blue-400 via-purple-400 to-pink-400 bg-clip-text text-transparent">
+              Join Our Heroes
+            </h1>
+          </div>
+
+          <p className="text-gray-300 text-sm mb-6 leading-relaxed">
+            Become a certified community responder. Your skills and compassion can save lives when disasters strike.
+          </p>
+
+          <div className="bg-gradient-to-r from-green-600/20 to-blue-600/20 backdrop-blur-lg rounded-xl p-4 border border-green-500/30 mb-6">
+            <div className="flex items-center justify-center gap-2 mb-2">
+              <Zap className="w-4 h-4 text-yellow-400" />
+              <span className="text-green-400 font-semibold text-sm">INSTANT IMPACT</span>
+              <Zap className="w-4 h-4 text-yellow-400" />
+            </div>
+            <p className="text-white text-xs">
+              Join <span className="text-yellow-400 font-bold">150+ active volunteers</span> making a difference
+            </p>
+          </div>
+        </div>
+
+        {/* Form Section */}
+        <div className={`transform transition-all duration-1000 delay-300 ${isVisible ? 'translate-y-0 opacity-100' : 'translate-y-10 opacity-0'}`}>
+          <div className="bg-white/10 backdrop-blur-lg rounded-2xl p-6 border border-white/20">
+            <form onSubmit={handleSubmit} className="space-y-5">
+              {/* Name Field */}
+              <div className="relative">
+                <div className="absolute left-3 top-1/2 transform -translate-y-1/2">
+                  <User className="w-5 h-5 text-gray-400" />
+                </div>
+                <input
+                  value={name}
+                  onChange={(e)=>setName(e.target.value)}
+                  required
+                  placeholder="Full name"
+                  className="w-full pl-11 pr-4 py-3 bg-white/10 backdrop-blur border border-white/20 rounded-xl text-white placeholder-gray-400 focus:border-blue-400 focus:outline-none transition-colors"
+                />
+              </div>
+
+              {/* Phone Field */}
+              <div className="relative">
+                <div className="absolute left-3 top-1/2 transform -translate-y-1/2">
+                  <Phone className="w-5 h-5 text-gray-400" />
+                </div>
+                <input
+                  value={phone}
+                  onChange={(e)=>setPhone(e.target.value)}
+                  required
+                  placeholder="Phone number (e.g. +1415555...)"
+                  className="w-full pl-11 pr-4 py-3 bg-white/10 backdrop-blur border border-white/20 rounded-xl text-white placeholder-gray-400 focus:border-blue-400 focus:outline-none transition-colors"
+                />
+              </div>
+
+              {/* Skills Field */}
+              <div className="relative">
+                <div className="absolute left-3 top-4">
+                  <Zap className="w-5 h-5 text-gray-400" />
+                </div>
+                <textarea
+                  value={skills}
+                  onChange={(e)=>setSkills(e.target.value)}
+                  placeholder="Skills & experience (e.g., medical training, logistics, search & rescue, tech support)"
+                  rows={3}
+                  className="w-full pl-11 pr-4 py-3 bg-white/10 backdrop-blur border border-white/20 rounded-xl text-white placeholder-gray-400 focus:border-blue-400 focus:outline-none transition-colors resize-none"
+                />
+              </div>
+
+              {/* SMS Subscription */}
+              <div className="flex items-center gap-3 p-4 bg-blue-600/20 rounded-xl border border-blue-400/30">
+                <input
+                  type="checkbox"
+                  id="sms-alerts"
+                  checked={subscribed}
+                  onChange={(e)=>setSubscribed(e.target.checked)}
+                  className="w-4 h-4 rounded border-2 border-blue-400 bg-transparent checked:bg-blue-500 focus:ring-blue-400"
+                />
+                <label htmlFor="sms-alerts" className="text-sm text-blue-200 flex items-center gap-2">
+                  <AlertTriangle className="w-4 h-4" />
+                  Subscribe to emergency SMS alerts in my area
+                </label>
+              </div>
+
+              {/* Submit Button */}
+              <button
+                type="submit"
+                disabled={loading}
+                className="group w-full relative overflow-hidden bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 disabled:from-gray-600 disabled:to-gray-700 text-white px-6 py-4 rounded-xl font-semibold transition-all duration-300 transform hover:scale-105 disabled:scale-100 disabled:cursor-not-allowed"
+              >
+                <div className="absolute inset-0 bg-gradient-to-r from-white/0 via-white/20 to-white/0 transform -skew-x-12 -translate-x-full group-hover:translate-x-full transition-transform duration-700"></div>
+                <span className="relative flex items-center justify-center gap-2">
+                  {loading ? (
+                    <>
+                      <div className="w-5 h-5 border-2 border-white/30 border-t-white rounded-full animate-spin"></div>
+                      Joining Heroes Network...
+                    </>
+                  ) : (
+                    <>
+                      <Heart className="w-5 h-5" />
+                      Join as Volunteer Hero
+                    </>
+                  )}
+                </span>
+              </button>
+            </form>
+
+            {/* Success Message */}
+            {success && (
+              <div className="mt-6 bg-gradient-to-r from-green-600/20 to-emerald-600/20 backdrop-blur-lg rounded-xl p-4 border border-green-400/30 animate-pulse">
+                <div className="flex items-center justify-center gap-2">
+                  <CheckCircle className="w-6 h-6 text-green-400" />
+                  <p className="text-green-300 font-semibold">Welcome to the Heroes Network!</p>
+                </div>
+                <p className="text-green-200 text-sm text-center mt-2">
+                  You'll receive SMS alerts for emergencies in your area. Thank you for stepping up to help your community!
+                </p>
+              </div>
+            )}
+          </div>
+        </div>
+
+        {/* Info Cards */}
+        <div className={`mt-8 space-y-4 transform transition-all duration-1000 delay-500 ${isVisible ? 'translate-y-0 opacity-100' : 'translate-y-10 opacity-0'}`}>
+          <div className="bg-white/5 backdrop-blur-lg rounded-xl p-4 border border-white/10">
+            <h3 className="font-semibold text-yellow-400 mb-2">What to Expect</h3>
+            <ul className="text-gray-300 text-sm space-y-1">
+              <li>• Receive SMS alerts only for emergencies in your area</li>
+              <li>• One-tap response system - no complex apps</li>
+              <li>• Background verification for community safety</li>
+              <li>• Optional training sessions and community events</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
   );
 }
