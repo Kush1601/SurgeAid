@@ -39,7 +39,7 @@ export default function VolunteerForm() {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-blue-900 via-purple-900 to-indigo-900 text-white -mx-4 -my-4">
+    <div className="min-h-screen text-black -mx-4 -my-4" style={{backgroundColor: '#fdf0d5'}}>
       {/* Animated background particles */}
       <div className="absolute inset-0">
         {[...Array(15)].map((_, i) => (
@@ -63,26 +63,26 @@ export default function VolunteerForm() {
         <div className={`text-center mb-8 transform transition-all duration-1000 ${isVisible ? 'translate-y-0 opacity-100' : 'translate-y-10 opacity-0'}`}>
           <div className="inline-flex items-center gap-3 mb-4">
             <div className="relative">
-              <Heart className="w-8 h-8 animate-pulse" style={{color: '#ca0013'}} />
-              <div className="absolute -top-1 -right-1 w-3 h-3 rounded-full animate-ping" style={{backgroundColor: '#ca0013'}}></div>
+              <Heart className="w-8 h-8 animate-pulse" style={{color: '#c1121f'}} />
+              <div className="absolute -top-1 -right-1 w-3 h-3 rounded-full animate-ping" style={{backgroundColor: '#c1121f'}}></div>
             </div>
-            <h1 className="text-3xl font-black" style={{color: '#ca0013'}}>
+            <h1 className="text-3xl font-black" style={{color: '#c1121f'}}>
               Join Our Heroes
             </h1>
           </div>
 
-          <p className="text-gray-300 text-sm mb-6 leading-relaxed">
+          <p className="text-black text-sm mb-6 leading-relaxed">
             Become a certified community responder. Your skills and compassion can save lives when disasters strike.
           </p>
 
-          <div className="backdrop-blur-lg rounded-xl p-4 border mb-6" style={{backgroundColor: 'rgba(251, 191, 36, 0.2)', borderColor: 'rgba(251, 191, 36, 0.3)'}}>
+          <div className="backdrop-blur-lg rounded-xl p-4 border mb-6" style={{backgroundColor: 'rgba(193, 18, 31, 0.1)', borderColor: 'rgba(193, 18, 31, 0.3)'}}>
             <div className="flex items-center justify-center gap-2 mb-2">
-              <Zap className="w-4 h-4" style={{color: '#ca0013'}} />
-              <span className="font-semibold text-sm" style={{color: '#ca0013'}}>INSTANT IMPACT</span>
-              <Zap className="w-4 h-4" style={{color: '#ca0013'}} />
+              <Zap className="w-4 h-4" style={{color: '#c1121f'}} />
+              <span className="font-semibold text-sm" style={{color: '#c1121f'}}>INSTANT IMPACT</span>
+              <Zap className="w-4 h-4" style={{color: '#c1121f'}} />
             </div>
-            <p className="text-white text-xs">
-              Join <span className="font-bold" style={{color: '#fbbf24'}}>150+ active volunteers</span> making a difference
+            <p className="text-black text-xs">
+              Join <span className="font-bold" style={{color: '#c1121f'}}>150+ active volunteers</span> making a difference
             </p>
           </div>
         </div>
@@ -101,9 +101,9 @@ export default function VolunteerForm() {
                   onChange={(e)=>setName(e.target.value)}
                   required
                   placeholder="Full name"
-                  className="w-full pl-11 pr-4 py-3 bg-white/10 backdrop-blur border border-white/20 rounded-xl text-white placeholder-gray-400 focus:outline-none transition-colors"
-                  onFocus={(e) => e.target.style.borderColor = '#fbbf24'}
-                  onBlur={(e) => e.target.style.borderColor = 'rgba(255,255,255,0.2)'}
+                  className="w-full pl-11 pr-4 py-3 bg-white/20 backdrop-blur border border-gray-300 rounded-xl text-black placeholder-gray-500 focus:outline-none transition-colors"
+                  onFocus={(e) => e.target.style.borderColor = '#c1121f'}
+                  onBlur={(e) => e.target.style.borderColor = 'rgb(209 213 219)'}
                 />
               </div>
 

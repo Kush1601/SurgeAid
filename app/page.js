@@ -22,24 +22,7 @@ export default function Home() {
   }, []);
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-blue-900 via-purple-900 to-indigo-900 text-white -mx-4 -my-4">
-      {/* Animated background particles */}
-      <div className="absolute inset-0">
-        {[...Array(20)].map((_, i) => (
-          <div
-            key={i}
-            className="absolute animate-pulse opacity-20"
-            style={{
-              left: `${Math.random() * 100}%`,
-              top: `${Math.random() * 100}%`,
-              animationDelay: `${Math.random() * 2}s`,
-              animationDuration: `${3 + Math.random() * 2}s`
-            }}
-          >
-            <div className="w-2 h-2 bg-blue-400 rounded-full"></div>
-          </div>
-        ))}
-      </div>
+    <div className="min-h-screen text-black -mx-4 -my-4" style={{backgroundColor: '#fdf0d5'}}>
 
       <div className="relative z-10 max-w-xl mx-auto px-4 py-8">
         {/* Hero Section */}
@@ -47,15 +30,15 @@ export default function Home() {
           <div className="mb-8">
             <div className="inline-flex items-center gap-3 mb-6">
               <div className="relative">
-                <AlertTriangle className="w-10 h-10 animate-bounce" style={{color: '#ca0013'}} />
-                <div className="absolute -top-1 -right-1 w-3 h-3 rounded-full animate-ping" style={{backgroundColor: '#ca0013'}}></div>
+                <AlertTriangle className="w-10 h-10 animate-bounce" style={{color: '#c1121f'}} />
+                <div className="absolute -top-1 -right-1 w-3 h-3 rounded-full animate-ping" style={{backgroundColor: '#c1121f'}}></div>
               </div>
-              <h1 className="text-4xl font-black" style={{color: '#ca0013'}}>
+              <h1 className="text-4xl font-black" style={{color: '#c1121f'}}>
                 SurgeAid
               </h1>
             </div>
 
-            <p className="text-sm text-gray-300 leading-relaxed">
+            <p className="text-sm text-black leading-relaxed">
               When disaster strikes, every second counts. SurgeAid instantly mobilizes local volunteers through smart SMS alerts, creating a rapid response network in your community.
             </p>
           </div>
@@ -64,7 +47,8 @@ export default function Home() {
           <div className="flex flex-col gap-3 mb-8">
             <a
               href="/volunteer"
-              className="group relative overflow-hidden bg-gradient-to-r from-blue-600 to-blue-700 hover:from-blue-700 hover:to-blue-800 text-white px-6 py-3 rounded-full font-semibold transition-all duration-300 transform hover:scale-105"
+              className="group relative overflow-hidden text-white px-6 py-3 rounded-full font-semibold transition-all duration-300 transform hover:scale-105"
+              style={{backgroundColor: '#003049'}}
             >
               <div className="absolute inset-0 bg-gradient-to-r from-white/0 via-white/20 to-white/0 transform -skew-x-12 -translate-x-full group-hover:translate-x-full transition-transform duration-700"></div>
               <span className="relative flex items-center justify-center gap-2">
@@ -77,7 +61,7 @@ export default function Home() {
             <a
               href="/report"
               className="group relative overflow-hidden text-white px-6 py-3 rounded-full font-semibold transition-all duration-300 transform hover:scale-105"
-              style={{backgroundColor: '#ca0013', boxShadow: '0 4px 14px 0 rgba(202, 0, 19, 0.39)'}}
+              style={{backgroundColor: '#c1121f'}}
             >
               <div className="absolute inset-0 bg-gradient-to-r from-white/0 via-white/20 to-white/0 transform -skew-x-12 -translate-x-full group-hover:translate-x-full transition-transform duration-700"></div>
               <span className="relative flex items-center justify-center gap-2">
@@ -89,7 +73,8 @@ export default function Home() {
 
             <a
               href="/map"
-              className="group relative overflow-hidden bg-gradient-to-r from-purple-600 to-indigo-600 hover:from-purple-700 hover:to-indigo-700 text-white px-6 py-3 rounded-full font-semibold transition-all duration-300 transform hover:scale-105"
+              className="group relative overflow-hidden text-white px-6 py-3 rounded-full font-semibold transition-all duration-300 transform hover:scale-105"
+              style={{backgroundColor: '#669bbc'}}
             >
               <div className="absolute inset-0 bg-gradient-to-r from-white/0 via-white/20 to-white/0 transform -skew-x-12 -translate-x-full group-hover:translate-x-full transition-transform duration-700"></div>
               <span className="relative flex items-center justify-center gap-2">
@@ -109,10 +94,10 @@ export default function Home() {
                   className={`text-center transform transition-all duration-500 ${
                     currentStat === index ? 'scale-110' : 'scale-100'
                   }`}
-                  style={{color: currentStat === index ? '#fbbf24' : 'white'}}
+                  style={{color: currentStat === index ? '#c1121f' : 'black'}}
                 >
                   <div className="text-xl font-bold">{stat.number}</div>
-                  <div className="text-xs text-gray-300">{stat.label}</div>
+                  <div className="text-xs text-black">{stat.label}</div>
                 </div>
               ))}
             </div>
@@ -121,7 +106,7 @@ export default function Home() {
 
         {/* How it Works Section */}
         <section className={`mb-12 transform transition-all duration-1000 delay-300 ${isVisible ? 'translate-y-0 opacity-100' : 'translate-y-10 opacity-0'}`}>
-          <h2 className="text-2xl font-bold text-center mb-8 bg-gradient-to-r from-blue-400 to-purple-400 bg-clip-text text-transparent">
+          <h2 className="text-2xl font-bold text-center mb-8" style={{color: '#780000'}}>
             How SurgeAid Works
           </h2>
 
@@ -158,11 +143,11 @@ export default function Home() {
                     </div>
 
                     <div className="flex-1">
-                      <h3 className="font-bold mb-1 text-white group-hover:transition-colors" style={{'--hover-color': '#fbbf24'}} onMouseEnter={(e) => e.target.style.color = '#fbbf24'} onMouseLeave={(e) => e.target.style.color = 'white'}>
+                      <h3 className="font-bold mb-1 text-black group-hover:transition-colors">
                         {step.title}
                       </h3>
 
-                      <p className="text-gray-300 text-sm leading-relaxed">
+                      <p className="text-black text-sm leading-relaxed">
                         {step.description}
                       </p>
                     </div>
@@ -180,7 +165,7 @@ export default function Home() {
         {/* Features Section */}
         <section className={`mb-12 transform transition-all duration-1000 delay-500 ${isVisible ? 'translate-y-0 opacity-100' : 'translate-y-10 opacity-0'}`}>
           <div className="bg-gradient-to-r from-white/5 to-white/10 backdrop-blur-lg rounded-xl p-6 border border-white/20">
-            <h3 className="text-xl font-bold text-center mb-6" style={{color: '#fbbf24'}}>Why Choose SurgeAid?</h3>
+            <h3 className="text-xl font-bold text-center mb-6" style={{color: '#780000'}}>Why Choose SurgeAid?</h3>
 
             <div className="grid grid-cols-1 gap-4">
               {[
@@ -191,11 +176,11 @@ export default function Home() {
                 const IconComponent = feature.icon;
                 return (
                   <div key={index} className="text-center group">
-                    <div className="inline-flex items-center justify-center w-10 h-10 bg-gradient-to-r from-blue-500 to-purple-500 rounded-full mb-3 group-hover:animate-spin">
+                    <div className="inline-flex items-center justify-center w-10 h-10 rounded-full mb-3 group-hover:animate-spin" style={{background: 'linear-gradient(to right, #780000, #c1121f)'}}>
                       <IconComponent className="w-5 h-5 text-white" />
                     </div>
-                    <h4 className="font-semibold mb-1 text-white">{feature.title}</h4>
-                    <p className="text-gray-300 text-sm">{feature.desc}</p>
+                    <h4 className="font-semibold mb-1 text-black">{feature.title}</h4>
+                    <p className="text-black text-sm">{feature.desc}</p>
                   </div>
                 );
               })}
@@ -205,16 +190,16 @@ export default function Home() {
 
         {/* Emergency Banner */}
         <section className={`text-center transform transition-all duration-1000 delay-700 ${isVisible ? 'translate-y-0 opacity-100' : 'translate-y-10 opacity-0'}`}>
-          <div className="bg-gradient-to-r from-red-600/20 to-orange-600/20 backdrop-blur-lg rounded-xl p-4 border border-red-500/30">
+          <div className="backdrop-blur-lg rounded-xl p-4 border" style={{backgroundColor: 'rgba(193, 18, 31, 0.1)', borderColor: 'rgba(193, 18, 31, 0.3)'}}>
             <div className="flex items-center justify-center gap-2 mb-3">
-              <div className="w-2 h-2 rounded-full animate-ping" style={{backgroundColor: '#ca0013'}}></div>
-              <span className="font-semibold" style={{color: '#ca0013'}}>LIVE SYSTEM STATUS</span>
-              <div className="w-2 h-2 rounded-full animate-ping" style={{backgroundColor: '#ca0013'}}></div>
+              <div className="w-2 h-2 rounded-full animate-ping" style={{backgroundColor: '#c1121f'}}></div>
+              <span className="font-semibold" style={{color: '#c1121f'}}>LIVE SYSTEM STATUS</span>
+              <div className="w-2 h-2 rounded-full animate-ping" style={{backgroundColor: '#c1121f'}}></div>
             </div>
-            <p className="text-white font-medium text-sm">
-              🚨 SurgeAid is monitoring <span className="font-bold" style={{color: '#fbbf24'}}>12 active incidents</span> across 4 communities
+            <p className="text-black font-medium text-sm">
+              🚨 SurgeAid is monitoring <span className="font-bold" style={{color: '#c1121f'}}>12 active incidents</span> across 4 communities
             </p>
-            <p className="text-gray-300 text-xs mt-2">
+            <p className="text-black text-xs mt-2">
               Join volunteers making a difference in their neighborhoods
             </p>
           </div>

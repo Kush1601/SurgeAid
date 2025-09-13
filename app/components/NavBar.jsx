@@ -18,10 +18,10 @@ export default function NavBar() {
         {/* Logo - Compact Mobile Version */}
         <Link href="/" className="flex items-center gap-2 group min-w-0">
           <div className="relative flex-shrink-0">
-            <AlertTriangle className="w-5 h-5 group-hover:animate-pulse transition-all" style={{color: '#ca0013'}} />
-            <div className="absolute -top-0.5 -right-0.5 w-1.5 h-1.5 rounded-full animate-ping" style={{backgroundColor: '#ca0013'}}></div>
+            <AlertTriangle className="w-5 h-5 group-hover:animate-pulse transition-all" style={{color: '#c1121f'}} />
+            <div className="absolute -top-0.5 -right-0.5 w-1.5 h-1.5 rounded-full animate-ping" style={{backgroundColor: '#c1121f'}}></div>
           </div>
-          <span className="text-lg font-bold truncate" style={{color: '#ca0013'}}>
+          <span className="text-lg font-bold truncate" style={{color: '#c1121f'}}>
             SurgeAid
           </span>
         </Link>
@@ -43,19 +43,19 @@ export default function NavBar() {
                 }`}
                 style={{
                   backgroundColor: isActive ? '#fef3c7' : undefined,
-                  color: isActive ? '#ca0013' : undefined
+                  color: isActive ? '#c1121f' : undefined
                 }}
               >
                 <div className="flex flex-col items-center gap-0.5 min-w-0">
                   <Icon className={`w-4 h-4 flex-shrink-0 ${
                     isActive ? "" : "text-gray-500"
-                  }`} style={{color: isActive ? '#ca0013' : undefined}} />
+                  }`} style={{color: isActive ? '#c1121f' : undefined}} />
                   <span className="truncate leading-none">{item.label}</span>
                 </div>
 
                 {/* Active indicator - Mobile style */}
                 {isActive && (
-                  <div className="absolute -bottom-0.5 left-1/2 transform -translate-x-1/2 w-4 h-0.5 rounded-full" style={{backgroundColor: '#ca0013'}}></div>
+                  <div className="absolute -bottom-0.5 left-1/2 transform -translate-x-1/2 w-4 h-0.5 rounded-full" style={{backgroundColor: '#c1121f'}}></div>
                 )}
               </Link>
             );
