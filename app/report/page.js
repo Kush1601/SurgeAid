@@ -44,7 +44,6 @@ export default function ReportPage() {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    if (!title) { alert("Please add a short title."); return; }
     setLoading(true);
     try {
       await addDoc(collection(db, "disasters"), {
@@ -54,6 +53,14 @@ export default function ReportPage() {
         lng: lng ? parseFloat(lng) : null,
         createdAt: serverTimestamp(),
       });
+
+      // Trigger SMS to volunteers
+      await fetch("/api/trigger-alert", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ title, description, lat, lng })
+      });
+
       setTitle(""); setDescription(""); setLat(""); setLng("");
     } catch (err) {
       console.error(err);
@@ -61,6 +68,7 @@ export default function ReportPage() {
     }
     setLoading(false);
   };
+
 
   const formatTimeAgo = (timestamp) => {
     if (!timestamp?.toDate) return "";
@@ -77,7 +85,7 @@ export default function ReportPage() {
   };
 
   return (
-    <div className="min-h-screen text-black -mx-4 -my-4" style={{backgroundColor: '#fefbf3'}}>
+    <div className="min-h-screen text-black -mx-4 -my-4" style={{ backgroundColor: '#fefbf3' }}>
       {/* Animated background particles */}
       <div className="absolute inset-0">
         {[...Array(15)].map((_, i) => (
@@ -101,10 +109,10 @@ export default function ReportPage() {
         <div className={`text-center mb-8 transform transition-all duration-1000 ${isVisible ? 'translate-y-0 opacity-100' : 'translate-y-10 opacity-0'}`}>
           <div className="inline-flex items-center gap-3 mb-4">
             <div className="relative">
-              <AlertTriangle className="w-8 h-8 animate-bounce" style={{color: '#c1121f'}} />
-              <div className="absolute -top-1 -right-1 w-3 h-3 rounded-full animate-ping" style={{backgroundColor: '#c1121f'}}></div>
+              <AlertTriangle className="w-8 h-8 animate-bounce" style={{ color: '#c1121f' }} />
+              <div className="absolute -top-1 -right-1 w-3 h-3 rounded-full animate-ping" style={{ backgroundColor: '#c1121f' }}></div>
             </div>
-            <h1 className="text-3xl font-black" style={{color: '#c1121f'}}>
+            <h1 className="text-3xl font-black" style={{ color: '#c1121f' }}>
               Emergency Report
             </h1>
           </div>
@@ -113,21 +121,21 @@ export default function ReportPage() {
             Report emergencies and incidents in your area. Every second counts—help us mobilize volunteers quickly.
           </p>
 
-          <div className="backdrop-blur-lg rounded-xl p-4 border mb-6" style={{backgroundColor: 'rgba(193, 18, 31, 0.1)', borderColor: 'rgba(193, 18, 31, 0.3)'}}>
+          <div className="backdrop-blur-lg rounded-xl p-4 border mb-6" style={{ backgroundColor: 'rgba(193, 18, 31, 0.1)', borderColor: 'rgba(193, 18, 31, 0.3)' }}>
             <div className="flex items-center justify-center gap-2 mb-2">
-              <Target className="w-4 h-4" style={{color: '#fbbf24'}} />
-              <span className="font-semibold text-sm" style={{color: '#c1121f'}}>RAPID RESPONSE</span>
-              <Target className="w-4 h-4" style={{color: '#fbbf24'}} />
+              <Target className="w-4 h-4" style={{ color: '#fbbf24' }} />
+              <span className="font-semibold text-sm" style={{ color: '#c1121f' }}>RAPID RESPONSE</span>
+              <Target className="w-4 h-4" style={{ color: '#fbbf24' }} />
             </div>
             <p className="text-black text-xs">
-              Reports reach <span className="font-bold" style={{color: '#c1121f'}}>150+ volunteers</span> in under 60 seconds
+              Reports reach <span className="font-bold" style={{ color: '#c1121f' }}>150+ volunteers</span> in under 60 seconds
             </p>
           </div>
         </div>
 
         {/* Report Form */}
         <div className={`mb-8 transform transition-all duration-1000 delay-300 ${isVisible ? 'translate-y-0 opacity-100' : 'translate-y-10 opacity-0'}`}>
-          <div className="backdrop-blur-lg rounded-2xl p-6 border" style={{backgroundColor: 'rgba(255, 255, 255, 0.4)', borderColor: 'rgba(193, 18, 31, 0.2)'}}>
+          <div className="backdrop-blur-lg rounded-2xl p-6 border" style={{ backgroundColor: 'rgba(255, 255, 255, 0.4)', borderColor: 'rgba(193, 18, 31, 0.2)' }}>
             <form onSubmit={handleSubmit} className="space-y-5">
               {/* Title Field */}
               <div className="relative">
@@ -136,7 +144,7 @@ export default function ReportPage() {
                 </div>
                 <input
                   value={title}
-                  onChange={e=>setTitle(e.target.value)}
+                  onChange={e => setTitle(e.target.value)}
                   placeholder="Emergency title (e.g., 'House fire on Main St')"
                   className="w-full pl-11 pr-4 py-3 bg-white/20 backdrop-blur border border-gray-300 rounded-xl text-black placeholder-gray-500 focus:outline-none transition-colors"
                   onFocus={(e) => e.target.style.borderColor = '#c1121f'}
@@ -152,7 +160,7 @@ export default function ReportPage() {
                 </div>
                 <textarea
                   value={description}
-                  onChange={e=>setDescription(e.target.value)}
+                  onChange={e => setDescription(e.target.value)}
                   placeholder="Describe the situation, resources needed, and any immediate dangers..."
                   rows={4}
                   className="w-full pl-11 pr-4 py-3 bg-white/20 backdrop-blur border border-gray-300 rounded-xl text-black placeholder-gray-500 focus:outline-none transition-colors resize-none"
@@ -170,7 +178,7 @@ export default function ReportPage() {
                     </div>
                     <input
                       value={lat}
-                      onChange={e=>setLat(e.target.value)}
+                      onChange={e => setLat(e.target.value)}
                       placeholder="Latitude"
                       className="w-full pl-10 pr-4 py-3 bg-white/20 backdrop-blur border border-gray-300 rounded-xl text-black placeholder-gray-500 focus:outline-none transition-colors"
                       onFocus={(e) => e.target.style.borderColor = '#c1121f'}
@@ -180,7 +188,7 @@ export default function ReportPage() {
                   <div className="relative flex-1">
                     <input
                       value={lng}
-                      onChange={e=>setLng(e.target.value)}
+                      onChange={e => setLng(e.target.value)}
                       placeholder="Longitude"
                       className="w-full px-4 py-3 bg-white/20 backdrop-blur border border-gray-300 rounded-xl text-black placeholder-gray-500 focus:outline-none transition-colors"
                       onFocus={(e) => e.target.style.borderColor = '#c1121f'}
@@ -214,7 +222,7 @@ export default function ReportPage() {
                 type="submit"
                 disabled={loading}
                 className="group w-full relative overflow-hidden text-white px-6 py-4 rounded-xl font-semibold transition-all duration-300 transform hover:scale-105 disabled:scale-100 disabled:cursor-not-allowed"
-                style={{backgroundColor: loading ? '#9ca3af' : '#ca0013', boxShadow: loading ? 'none' : '0 4px 14px 0 rgba(202, 0, 19, 0.39)'}}
+                style={{ backgroundColor: loading ? '#9ca3af' : '#ca0013', boxShadow: loading ? 'none' : '0 4px 14px 0 rgba(202, 0, 19, 0.39)' }}
               >
                 <div className="absolute inset-0 bg-gradient-to-r from-white/0 via-white/20 to-white/0 transform -skew-x-12 -translate-x-full group-hover:translate-x-full transition-transform duration-700"></div>
                 <span className="relative flex items-center justify-center gap-2">
@@ -237,7 +245,7 @@ export default function ReportPage() {
 
         {/* Recent Reports */}
         <div className={`transform transition-all duration-1000 delay-500 ${isVisible ? 'translate-y-0 opacity-100' : 'translate-y-10 opacity-0'}`}>
-          <div className="backdrop-blur-lg rounded-2xl p-6 border" style={{backgroundColor: 'rgba(255, 255, 255, 0.4)', borderColor: 'rgba(193, 18, 31, 0.2)'}}>
+          <div className="backdrop-blur-lg rounded-2xl p-6 border" style={{ backgroundColor: 'rgba(255, 255, 255, 0.4)', borderColor: 'rgba(193, 18, 31, 0.2)' }}>
             <div className="flex items-center gap-2 mb-4">
               <Clock className="w-5 h-5 text-blue-400" />
               <h3 className="font-semibold text-black">Live Incident Feed</h3>
@@ -253,10 +261,10 @@ export default function ReportPage() {
             ) : (
               <div className="space-y-3 max-h-96 overflow-y-auto">
                 {reports.map(r => (
-                  <div key={r.id} className="rounded-xl p-4 border transition-colors" style={{backgroundColor: 'rgba(255, 255, 255, 0.4)', borderColor: 'rgba(193, 18, 31, 0.2)'}} onMouseEnter={(e) => e.target.style.borderColor = 'rgba(193, 18, 31, 0.4)'} onMouseLeave={(e) => e.target.style.borderColor = 'rgba(193, 18, 31, 0.2)'}>
+                  <div key={r.id} className="rounded-xl p-4 border transition-colors" style={{ backgroundColor: 'rgba(255, 255, 255, 0.4)', borderColor: 'rgba(193, 18, 31, 0.2)' }} onMouseEnter={(e) => e.target.style.borderColor = 'rgba(193, 18, 31, 0.4)'} onMouseLeave={(e) => e.target.style.borderColor = 'rgba(193, 18, 31, 0.2)'}>
                     <div className="flex justify-between items-start mb-2">
                       <div className="flex items-center gap-2">
-                        <div className="w-2 h-2 rounded-full animate-pulse" style={{backgroundColor: '#ca0013'}}></div>
+                        <div className="w-2 h-2 rounded-full animate-pulse" style={{ backgroundColor: '#ca0013' }}></div>
                         <h4 className="font-semibold text-black text-sm">{r.title}</h4>
                       </div>
                       <div className="flex items-center gap-1 text-xs text-gray-400">
@@ -275,8 +283,8 @@ export default function ReportPage() {
                         {r.lat && r.lng ? `${r.lat}, ${r.lng}` : "Location not provided"}
                       </div>
                       <div className="flex items-center gap-1">
-                        <Zap className="w-3 h-3" style={{color: '#fbbf24'}} />
-                        <span style={{color: '#fbbf24'}}>Active</span>
+                        <Zap className="w-3 h-3" style={{ color: '#fbbf24' }} />
+                        <span style={{ color: '#fbbf24' }}>Active</span>
                       </div>
                     </div>
                   </div>
