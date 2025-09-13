@@ -159,8 +159,7 @@ export default function VolunteerForm() {
               <button
                 type="submit"
                 disabled={loading}
-                className="group w-full relative overflow-hidden text-black px-6 py-4 rounded-xl font-semibold transition-all duration-300 transform hover:scale-105 disabled:scale-100 disabled:cursor-not-allowed"
-                style={{backgroundColor: loading ? '#9ca3af' : '#fbbf24', boxShadow: loading ? 'none' : '0 4px 14px 0 rgba(251, 191, 36, 0.39)'}}
+                className="group w-full relative overflow-hidden bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 disabled:from-gray-600 disabled:to-gray-700 text-white px-6 py-4 rounded-xl font-semibold transition-all duration-300 transform hover:scale-105 disabled:scale-100 disabled:cursor-not-allowed"
               >
                 <div className="absolute inset-0 bg-gradient-to-r from-white/0 via-white/20 to-white/0 transform -skew-x-12 -translate-x-full group-hover:translate-x-full transition-transform duration-700"></div>
                 <span className="relative flex items-center justify-center gap-2">
@@ -171,7 +170,7 @@ export default function VolunteerForm() {
                     </>
                   ) : (
                     <>
-                      <Heart className="w-5 h-5" style={{color: '#ca0013'}} />
+                      <Heart className="w-5 h-5" />
                       Join as Volunteer Hero
                     </>
                   )}

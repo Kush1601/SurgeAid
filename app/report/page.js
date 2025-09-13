@@ -193,8 +193,7 @@ export default function ReportPage() {
                   type="button"
                   onClick={useGeolocation}
                   disabled={locationLoading}
-                  className="w-full py-3 text-white rounded-xl transition-colors disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2"
-                  style={{backgroundColor: locationLoading ? 'rgba(156, 163, 175, 0.3)' : 'rgba(251, 191, 36, 0.3)', border: '1px solid rgba(251, 191, 36, 0.3)'}}
+                  className="w-full py-3 bg-purple-600/30 hover:bg-purple-600/50 border border-purple-400/30 text-white rounded-xl transition-colors disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2"
                 >
                   {locationLoading ? (
                     <>

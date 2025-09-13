@@ -64,14 +64,13 @@ export default function Home() {
           <div className="flex flex-col gap-3 mb-8">
             <a
               href="/volunteer"
-              className="group relative overflow-hidden text-black px-6 py-3 rounded-full font-semibold transition-all duration-300 transform hover:scale-105"
-              style={{backgroundColor: '#fbbf24', boxShadow: '0 4px 14px 0 rgba(251, 191, 36, 0.39)'}}
+              className="group relative overflow-hidden bg-gradient-to-r from-blue-600 to-blue-700 hover:from-blue-700 hover:to-blue-800 text-white px-6 py-3 rounded-full font-semibold transition-all duration-300 transform hover:scale-105"
             >
               <div className="absolute inset-0 bg-gradient-to-r from-white/0 via-white/20 to-white/0 transform -skew-x-12 -translate-x-full group-hover:translate-x-full transition-transform duration-700"></div>
               <span className="relative flex items-center justify-center gap-2">
-                <Heart className="w-4 h-4" style={{color: '#ca0013'}} />
+                <Heart className="w-4 h-4" />
                 Join as Volunteer
-                <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" style={{color: '#ca0013'}} />
+                <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
               </span>
             </a>
 
@@ -90,14 +89,13 @@ export default function Home() {
 
             <a
               href="/map"
-              className="group relative overflow-hidden text-black px-6 py-3 rounded-full font-semibold transition-all duration-300 transform hover:scale-105"
-              style={{backgroundColor: '#fbbf24', boxShadow: '0 4px 14px 0 rgba(251, 191, 36, 0.39)'}}
+              className="group relative overflow-hidden bg-gradient-to-r from-purple-600 to-indigo-600 hover:from-purple-700 hover:to-indigo-700 text-white px-6 py-3 rounded-full font-semibold transition-all duration-300 transform hover:scale-105"
             >
               <div className="absolute inset-0 bg-gradient-to-r from-white/0 via-white/20 to-white/0 transform -skew-x-12 -translate-x-full group-hover:translate-x-full transition-transform duration-700"></div>
               <span className="relative flex items-center justify-center gap-2">
-                <MapPin className="w-4 h-4" style={{color: '#ca0013'}} />
+                <MapPin className="w-4 h-4" />
                 View Live Map
-                <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" style={{color: '#ca0013'}} />
+                <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
               </span>
             </a>
           </div>
@@ -123,7 +121,7 @@ export default function Home() {
 
         {/* How it Works Section */}
         <section className={`mb-12 transform transition-all duration-1000 delay-300 ${isVisible ? 'translate-y-0 opacity-100' : 'translate-y-10 opacity-0'}`}>
-          <h2 className="text-2xl font-bold text-center mb-8" style={{color: '#ca0013'}}>
+          <h2 className="text-2xl font-bold text-center mb-8 bg-gradient-to-r from-blue-400 to-purple-400 bg-clip-text text-transparent">
             How SurgeAid Works
           </h2>
 
