@@ -22,7 +22,7 @@ export default function Home() {
   }, []);
 
   return (
-    <div className="min-h-screen text-black -mx-4 -my-4" style={{backgroundColor: '#fdf0d5'}}>
+    <div className="min-h-screen text-black -mx-4 -my-4" style={{backgroundColor: '#fefbf3'}}>
 
       <div className="relative z-10 max-w-xl mx-auto px-4 py-8">
         {/* Hero Section */}

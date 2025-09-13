@@ -77,7 +77,7 @@ export default function ReportPage() {
   };
 
   return (
-    <div className="min-h-screen text-black -mx-4 -my-4" style={{backgroundColor: '#fdf0d5'}}>
+    <div className="min-h-screen text-black -mx-4 -my-4" style={{backgroundColor: '#fefbf3'}}>
       {/* Animated background particles */}
       <div className="absolute inset-0">
         {[...Array(15)].map((_, i) => (
