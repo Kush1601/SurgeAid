@@ -135,7 +135,10 @@ export default function Home() {
               return (
                 <div
                   key={index}
-                  className="group relative bg-white/10 backdrop-blur-lg rounded-xl p-4 border border-white/20 hover:border-white/40 transition-all duration-300"
+                  className="group relative backdrop-blur-lg rounded-xl p-4 border transition-all duration-300"
+                  style={{backgroundColor: 'rgba(255, 255, 255, 0.4)', borderColor: 'rgba(193, 18, 31, 0.2)'}}
+                  onMouseEnter={(e) => e.target.style.borderColor = 'rgba(193, 18, 31, 0.4)'}
+                  onMouseLeave={(e) => e.target.style.borderColor = 'rgba(193, 18, 31, 0.2)'}
                 >
                   <div className="flex items-center gap-4">
                     <div className={`w-12 h-12 rounded-full bg-gradient-to-r ${step.color} flex items-center justify-center flex-shrink-0 group-hover:animate-pulse`}>
@@ -164,7 +167,7 @@ export default function Home() {
 
         {/* Features Section */}
         <section className={`mb-12 transform transition-all duration-1000 delay-500 ${isVisible ? 'translate-y-0 opacity-100' : 'translate-y-10 opacity-0'}`}>
-          <div className="bg-gradient-to-r from-white/5 to-white/10 backdrop-blur-lg rounded-xl p-6 border border-white/20">
+          <div className="backdrop-blur-lg rounded-xl p-6 border" style={{backgroundColor: 'rgba(255, 255, 255, 0.4)', borderColor: 'rgba(193, 18, 31, 0.2)'}}>
             <h3 className="text-xl font-bold text-center mb-6" style={{color: '#780000'}}>Why Choose SurgeAid?</h3>
 
             <div className="grid grid-cols-1 gap-4">

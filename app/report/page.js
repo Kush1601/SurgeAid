@@ -253,7 +253,7 @@ export default function ReportPage() {
             ) : (
               <div className="space-y-3 max-h-96 overflow-y-auto">
                 {reports.map(r => (
-                  <div key={r.id} className="bg-white/5 rounded-xl p-4 border border-white/10 hover:border-white/20 transition-colors">
+                  <div key={r.id} className="rounded-xl p-4 border transition-colors" style={{backgroundColor: 'rgba(255, 255, 255, 0.4)', borderColor: 'rgba(193, 18, 31, 0.2)'}} onMouseEnter={(e) => e.target.style.borderColor = 'rgba(193, 18, 31, 0.4)'} onMouseLeave={(e) => e.target.style.borderColor = 'rgba(193, 18, 31, 0.2)'}>
                     <div className="flex justify-between items-start mb-2">
                       <div className="flex items-center gap-2">
                         <div className="w-2 h-2 rounded-full animate-pulse" style={{backgroundColor: '#ca0013'}}></div>

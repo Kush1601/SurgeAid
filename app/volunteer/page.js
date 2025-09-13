@@ -100,9 +100,9 @@ export default function VolunteerForm() {
                   onChange={(e)=>setPhone(e.target.value)}
                   required
                   placeholder="Phone number (e.g. +1415555...)"
-                  className="w-full pl-11 pr-4 py-3 bg-white/10 backdrop-blur border border-white/20 rounded-xl text-white placeholder-gray-400 focus:outline-none transition-colors"
-                  onFocus={(e) => e.target.style.borderColor = '#fbbf24'}
-                  onBlur={(e) => e.target.style.borderColor = 'rgba(255,255,255,0.2)'}
+                  className="w-full pl-11 pr-4 py-3 bg-white/20 backdrop-blur border border-gray-300 rounded-xl text-black placeholder-gray-500 focus:outline-none transition-colors"
+                  onFocus={(e) => e.target.style.borderColor = '#c1121f'}
+                  onBlur={(e) => e.target.style.borderColor = 'rgb(209 213 219)'}
                 />
               </div>
 
@@ -116,9 +116,9 @@ export default function VolunteerForm() {
                   onChange={(e)=>setSkills(e.target.value)}
                   placeholder="Skills & experience (e.g., medical training, logistics, search & rescue, tech support)"
                   rows={3}
-                  className="w-full pl-11 pr-4 py-3 bg-white/10 backdrop-blur border border-white/20 rounded-xl text-white placeholder-gray-400 focus:outline-none transition-colors resize-none"
-                  onFocus={(e) => e.target.style.borderColor = '#fbbf24'}
-                  onBlur={(e) => e.target.style.borderColor = 'rgba(255,255,255,0.2)'}
+                  className="w-full pl-11 pr-4 py-3 bg-white/20 backdrop-blur border border-gray-300 rounded-xl text-black placeholder-gray-500 focus:outline-none transition-colors resize-none"
+                  onFocus={(e) => e.target.style.borderColor = '#c1121f'}
+                  onBlur={(e) => e.target.style.borderColor = 'rgb(209 213 219)'}
                 />
               </div>
 
