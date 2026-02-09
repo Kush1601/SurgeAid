@@ -4,6 +4,10 @@
 
 SurgeAid is a community-powered emergency response platform that instantly mobilizes local volunteers through smart SMS alerts. When disaster strikes, every second counts - our platform creates rapid response networks in communities to ensure help arrives quickly.
 
+## Images
+<img width="1440" height="821" alt="Screenshot 2026-02-08 at 11 27 26 PM" src="https://github.com/user-attachments/assets/2507439f-44c6-41c6-bb9e-f5fd1c688307" />
+
+
 ## 🌟 Features
 
 ### 🚨 **Emergency Reporting**
