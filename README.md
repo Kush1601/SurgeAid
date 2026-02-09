@@ -6,6 +6,8 @@ SurgeAid is a community-powered emergency response platform that instantly mobil
 
 ## Images
 <img width="1440" height="821" alt="Screenshot 2026-02-08 at 11 27 26 PM" src="https://github.com/user-attachments/assets/2507439f-44c6-41c6-bb9e-f5fd1c688307" />
+<img width="1440" height="817" alt="Screenshot 2026-02-08 at 11 27 54 PM" src="https://github.com/user-attachments/assets/1af973a8-46c0-46e7-a152-4311363c7db2" />
+<img width="1440" height="820" alt="Screenshot 2026-02-08 at 11 28 18 PM" src="https://github.com/user-attachments/assets/3bf82cd6-465e-4ab7-80c2-8d92cfeeb7ff" />
 
 
 ## 🌟 Features
