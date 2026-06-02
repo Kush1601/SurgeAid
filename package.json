@@ -6,10 +6,13 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "eslint"
+    "lint": "eslint",
+    "test:e2e": "playwright test"
   },
   "dependencies": {
-    "firebase": "^12.2.1",
+    "@anthropic-ai/sdk": "^0.100.1",
+    "@clerk/nextjs": "^7.4.2",
+    "@supabase/supabase-js": "^2.107.0",
     "leaflet": "^1.9.4",
     "lucide-react": "^0.544.0",
     "next": "15.5.3",
@@ -19,9 +22,15 @@
   },
   "devDependencies": {
     "@eslint/eslintrc": "^3",
+    "@playwright/test": "^1.60.0",
     "@tailwindcss/postcss": "^4",
+    "@types/leaflet": "^1.9.21",
+    "@types/node": "^25.9.1",
+    "@types/react": "^19.2.16",
+    "@types/react-dom": "^19.2.3",
     "eslint": "^9",
     "eslint-config-next": "15.5.3",
-    "tailwindcss": "^4"
+    "tailwindcss": "^4",
+    "typescript": "^6.0.3"
   }
 }

@@ -1,227 +1,215 @@
-# 🚨 SurgeAid
+# SurgeAid
 
-**Rapid volunteer mobilization for disasters and emergencies**
+**Real-time community emergency response platform**
 
-SurgeAid is a community-powered emergency response platform that instantly mobilizes local volunteers through smart SMS alerts. When disaster strikes, every second counts - our platform creates rapid response networks in communities to ensure help arrives quickly.
+SurgeAid lets coordinators report emergencies, auto-classifies severity and recommends volunteer skill sets with AI, and instantly broadcasts live alerts to all connected volunteers via WebSocket — no app install required.
 
-## Images
-<img width="1440" height="821" alt="Screenshot 2026-02-08 at 11 27 26 PM" src="https://github.com/user-attachments/assets/2507439f-44c6-41c6-bb9e-f5fd1c688307" />
-<img width="1440" height="817" alt="Screenshot 2026-02-08 at 11 27 54 PM" src="https://github.com/user-attachments/assets/1af973a8-46c0-46e7-a152-4311363c7db2" />
-<img width="1440" height="820" alt="Screenshot 2026-02-08 at 11 28 18 PM" src="https://github.com/user-attachments/assets/3bf82cd6-465e-4ab7-80c2-8d92cfeeb7ff" />
+---
 
+## Features
 
-## 🌟 Features
+- **AI triage** — Anthropic Claude classifies each incident (CRITICAL / HIGH / MEDIUM / LOW), surfaces a recommended first-responder action, and recommends volunteer skill sets needed
+- **Incident lifecycle** — Coordinators can mark incidents RESOLVED or FALSE_ALARM; status is reflected live on the feed and map
+- **Real-time alerts** — Supabase Realtime broadcasts incidents to all connected volunteer browsers in under a second
+- **Live incident feed** — Postgres change listeners keep the report page updated without polling
+- **Incident history & search** — Full-text search over all incidents via a PostgreSQL GIN index; paginated results with severity, status, and skills badges
+- **Coordinator dashboard** — Severity distribution, status breakdown, 14-day incident and volunteer signup trends, and hour-of-day heatmap
+- **Interactive map** — Leaflet renders both USGS earthquake data and community-reported incidents; resolved incidents shown in green
+- **Live stats** — Homepage and map show real volunteer/incident counts from the database
 
-### 🚨 **Emergency Reporting**
-- **Instant reporting**: Report emergencies with precise location data and resource needs
-- **Real-time alerts**: Emergency reports trigger immediate SMS notifications to nearby volunteers
-- **Live incident feed**: View all active incidents in real-time with status updates
+---
 
-### **Volunteer Network**
-- **Simple signup**: Join the volunteer network with basic contact information and skills
-- **SMS-based alerts**: No app required - receive emergency notifications via SMS
-- **Background verification**: Trusted volunteer network for community safety
-- **Skills-based matching**: Volunteers can specify their skills and areas of expertise
+## Tech Stack
 
-### 🗺️ **Live Response Map**
-- **Real-time visualization**: Interactive map showing active incidents and volunteer responses
-- **Dual data sources**: Displays both USGS earthquake data and community-reported incidents
-- **Response tracking**: Monitor volunteer response times and activity
+| Layer | Technology |
+|---|---|
+| Framework | Next.js 15 (App Router), TypeScript |
+| Styling | Tailwind CSS v4 |
+| Database | Supabase (PostgreSQL + Row Level Security) |
+| Real-time | Supabase Realtime (WebSocket broadcast + Postgres changes) |
+| AI classification | Anthropic Claude (`claude-haiku-4-5`) |
+| Auth | Clerk (Google + email; protects `/report` and `/dashboard`) |
+| Maps | Leaflet + React-Leaflet |
+| External data | USGS Earthquake GeoJSON API |
+| Testing | Playwright (E2E) |
 
-### ⚡ **Rapid Deployment**
-- **Sub-60 second response**: From incident report to volunteer alert in under a minute
-- **Location-based targeting**: Alerts sent to volunteers in the affected area
-- **One-tap response**: Simple SMS interface with response links
+---
 
-## 🛠️ Technology Stack
-
-- **Frontend**: Next.js 15, React 19, Tailwind CSS
-- **Backend**: Next.js API routes, Firebase Firestore
-- **Maps**: Leaflet with React-Leaflet integration
-- **SMS Integration**: Twilio API for emergency notifications
-- **Real-time Data**: USGS earthquake API integration
-- **Icons**: Lucide React for consistent iconography
-
-## 🚀 Getting Started
+## Getting Started
 
 ### Prerequisites
-- Node.js 18+ and npm
-- Firebase project with Firestore enabled
-- Twilio account for SMS functionality
+
+- Node.js 18+
+- [Supabase](https://supabase.com) project
+- [Clerk](https://clerk.com) application
+- Anthropic API key
 
 ### Installation
 
-1. **Clone the repository**
-   ```bash
-   git clone https://github.com/your-username/surgeaid.git
-   cd surgeaid
-   ```
+```bash
+git clone https://github.com/your-username/surgeaid.git
+cd surgeaid
+npm install
+```
 
-2. **Install dependencies**
-   ```bash
-   npm install
-   ```
+### Environment Variables
 
-3. **Configure Firebase**
-   - Create a Firebase project at [https://console.firebase.google.com](https://console.firebase.google.com)
-   - Enable Firestore Database
-   - Update `lib/firebase.js` with your Firebase configuration
+Copy `.env.example` to `.env.local` and fill in your credentials:
 
-4. **Configure Twilio (Optional for SMS alerts)**
-   - Sign up at [https://www.twilio.com](https://www.twilio.com)
-   - Get your Account SID, Auth Token, and phone number
-   - Update `app/api/trigger-alert/route.js` with your Twilio credentials
+```bash
+cp .env.example .env.local
+```
 
-5. **Run the development server**
-   ```bash
-   npm run dev
-   ```
+```env
+# Supabase — get these from your project's API settings at supabase.com
+NEXT_PUBLIC_SUPABASE_URL=
+NEXT_PUBLIC_SUPABASE_ANON_KEY=
+SUPABASE_SERVICE_ROLE_KEY=
 
-6. **Open your browser**
-   Navigate to [http://localhost:3000](http://localhost:3000)
+# Anthropic — server-side only
+ANTHROPIC_API_KEY=
 
-## 📁 Project Structure
+# Clerk — get these from clerk.com dashboard
+NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY=
+CLERK_SECRET_KEY=
+NEXT_PUBLIC_CLERK_SIGN_IN_URL=/sign-in
+NEXT_PUBLIC_CLERK_AFTER_SIGN_IN_URL=/report
+```
+
+### Database Setup
+
+Run both migrations in your Supabase SQL editor (or via `supabase db push`):
+
+```bash
+supabase/migrations/20260602000000_initial_schema.sql
+supabase/migrations/20260602000001_add_status_and_skills.sql
+```
+
+### Run
+
+```bash
+npm run dev
+```
+
+Open [http://localhost:3000](http://localhost:3000).
+
+---
+
+## Project Structure
 
 ```
 surgeaid/
 ├── app/
 │   ├── api/
-│   │   ├── disasters/        # USGS earthquake data API
-│   │   └── trigger-alert/    # SMS alert system
+│   │   ├── classify/         # POST — AI severity + skill set classification (Anthropic)
+│   │   ├── dashboard/        # GET  — Aggregated analytics data
+│   │   ├── disasters/        # GET  — USGS earthquake feed proxy
+│   │   ├── search/           # GET  — Full-text incident search (GIN index)
+│   │   ├── stats/            # GET  — Live volunteer + incident counts
+│   │   └── trigger-alert/    # POST — Broadcast incident via Supabase Realtime
 │   ├── components/
-│   │   ├── NavBar.jsx       # Navigation component
-│   │   └── MapDisasters.jsx # Interactive map component
-│   ├── map/                 # Live response map page
-│   ├── report/              # Emergency reporting page
-│   ├── volunteer/           # Volunteer signup page
-│   ├── layout.js           # Root layout
-│   └── page.js             # Home page
+│   │   ├── AlertToast.tsx    # Severity-coded real-time toast overlay
+│   │   ├── MapDisasters.tsx  # Leaflet map with USGS + Supabase markers
+│   │   └── NavBar.tsx        # Top navigation (Dashboard link shown when signed in)
+│   ├── hooks/
+│   │   └── useSupabaseAlerts.ts  # Supabase Realtime broadcast subscription
+│   ├── dashboard/            # /dashboard — Coordinator analytics (auth required)
+│   ├── history/              # /history   — Incident search and history
+│   ├── map/                  # /map       — Live response map
+│   ├── report/               # /report    — Submit emergency + live feed (auth required)
+│   ├── sign-in/              # /sign-in   — Clerk sign-in page
+│   ├── volunteer/            # /volunteer — Volunteer signup
+│   ├── layout.tsx
+│   └── page.tsx              # Homepage with live stats
 ├── lib/
-│   └── firebase.js         # Firebase configuration
-└── package.json
+│   ├── supabase.ts           # Supabase client init
+│   └── types.ts              # Shared TypeScript interfaces
+├── supabase/
+│   └── migrations/           # SQL migration files
+├── tests/
+│   └── e2e/                  # Playwright E2E tests
+├── middleware.ts              # Clerk auth — protects /report and /dashboard
+└── .env.example
 ```
-
-## 🎯 Core Workflows
-
-### 1. **Volunteer Registration**
-```
-Volunteer visits /volunteer → Fills out form → Data stored in Firestore → SMS alerts enabled
-```
-
-### 2. **Emergency Reporting**
-```
-Incident occurs → Report submitted at /report → Stored in Firestore → SMS sent to volunteers → Map updated
-```
-
-### 3. **Real-time Monitoring**
-```
-Users visit /map → Live incidents displayed → USGS + community data → Response metrics shown
-```
-
-## 📊 Database Schema
-
-### Volunteers Collection
-```javascript
-{
-  name: "John Doe",
-  phone: "+1234567890",
-  skills: "Medical training, CPR certified",
-  subscribed: true,
-  createdAt: Timestamp
-}
-```
-
-### Disasters Collection
-```javascript
-{
-  title: "House fire on Main Street",
-  description: "Structure fire, need medical support",
-  lat: 40.7128,
-  lng: -74.0060,
-  createdAt: Timestamp
-}
-```
-
-## 🔧 API Endpoints
-
-### `GET /api/disasters`
-Fetches real-time earthquake data from USGS API
-- Returns: GeoJSON format earthquake data for the past 24 hours
-
-### `POST /api/trigger-alert`
-Sends SMS alerts to subscribed volunteers
-- Body: `{ title, description, lat, lng }`
-- Returns: Confirmation of SMS delivery status
-
-## 🎨 Design System
-
-SurgeAid uses a carefully crafted color palette optimized for emergency response:
-
-- **Primary Red** (`#c1121f`): Emergency alerts and critical actions
-- **Deep Navy** (`#003049`): Volunteer actions and trust elements
-- **Warning Amber** (`#fbbf24`): Status indicators and highlights
-- **Ocean Blue** (`#669bbc`): Maps and informational elements
-- **Warm Cream** (`#fefbf3`): Background for reduced eye strain
-
-## 🚨 Production Deployment
-
-### Environment Variables (Required)
-```env
-# Firebase Configuration
-NEXT_PUBLIC_FIREBASE_API_KEY=your_api_key
-NEXT_PUBLIC_FIREBASE_AUTH_DOMAIN=your_auth_domain
-NEXT_PUBLIC_FIREBASE_PROJECT_ID=your_project_id
-
-# Twilio Configuration
-TWILIO_ACCOUNT_SID=your_account_sid
-TWILIO_AUTH_TOKEN=your_auth_token
-TWILIO_PHONE_NUMBER=your_twilio_number
-```
-
-### Build and Deploy
-```bash
-npm run build
-npm run start
-```
-
-## 📱 Mobile Optimization
-
-SurgeAid is designed mobile-first with:
-- Responsive design for all screen sizes
-- Touch-optimized interface elements
-- SMS-based alerts (no app installation required)
-- Optimized map interactions for mobile devices
-
-## 🤝 Contributing
-
-1. Fork the repository
-2. Create a feature branch (`git checkout -b feature/amazing-feature`)
-3. Commit your changes (`git commit -m 'Add amazing feature'`)
-4. Push to the branch (`git push origin feature/amazing-feature`)
-5. Open a Pull Request
-
-## 🎯 Roadmap
-
-- [ ] **Advanced Analytics**: Response time analytics and volunteer performance metrics
-- [ ] **Multi-language Support**: Localization for diverse communities
-- [ ] **Weather Integration**: Automatic weather-related emergency detection
-- [ ] **Training Modules**: Built-in volunteer training and certification system
-- [ ] **Resource Tracking**: Inventory management for emergency supplies
-- [ ] **Incident Command Integration**: Professional emergency response coordination
-
-## 📄 License
-
-This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
-
-## 🆘 Support
-
-For questions, issues, or support:
-- **Documentation**: Check this README and inline code comments
-- **Issues**: Open an issue on GitHub for bugs or feature requests
-- **Community**: Join our community discussions for help and ideas
 
 ---
 
-**🚨 SurgeAid - When disaster strikes, communities rise together.**
+## Core Flow
 
-*Built with ❤️ for safer, more connected communities*
+```
+Coordinator submits incident at /report
+  → POST /api/classify        — Claude returns severity + action brief + recommended skills
+  → Supabase INSERT            — Incident saved with severity, action, skills, status=ACTIVE
+  → POST /api/trigger-alert   — Supabase Realtime broadcasts to "surgeaid-alerts" channel
+  → AlertToast on /volunteer and /map — Volunteers see severity-coded toast in <1s
+
+Coordinator marks incident resolved at /report
+  → Supabase UPDATE status    — Feed and map reflect RESOLVED state instantly via Realtime
+```
+
+---
+
+## Database Schema
+
+**volunteers**
+```sql
+id uuid, name text, phone text, skills text, subscribed boolean, created_at timestamptz
+```
+
+**disasters**
+```sql
+id uuid, title text, description text, lat float8, lng float8,
+severity text,           -- CRITICAL | HIGH | MEDIUM | LOW | UNKNOWN
+action text,             -- AI-generated first-responder action brief
+recommended_skills text, -- AI-generated comma-separated skill sets
+status text,             -- ACTIVE | RESOLVED | FALSE_ALARM
+created_at timestamptz
+```
+
+Full-text search: GIN index on `to_tsvector('english', title || ' ' || description)`
+
+---
+
+## API Endpoints
+
+| Method | Route | Auth | Description |
+|---|---|---|---|
+| `GET` | `/api/stats` | — | Live volunteer + incident counts |
+| `GET` | `/api/disasters` | — | USGS earthquake GeoJSON proxy (24h) |
+| `GET` | `/api/search` | — | Full-text incident search with pagination |
+| `GET` | `/api/dashboard` | Service key | Aggregated analytics (severity, status, trends) |
+| `POST` | `/api/classify` | — | AI severity + action + skill set classification |
+| `POST` | `/api/trigger-alert` | — | Broadcast incident to Supabase Realtime channel |
+
+---
+
+## Testing
+
+```bash
+# Install browsers (first time only)
+npx playwright install chromium
+
+# Run all E2E tests
+npm run test:e2e
+```
+
+Tests cover: volunteer signup flow, coordinator route auth protection, history page search UI, and map render.
+
+---
+
+## Design System
+
+| Token | Value | Usage |
+|---|---|---|
+| Primary Red | `#c1121f` | Alerts, CTAs, CRITICAL severity |
+| Deep Navy | `#003049` | Volunteer actions |
+| Warning Amber | `#fbbf24` | ACTIVE status, MEDIUM severity |
+| Success Green | `#22c55e` | RESOLVED status, LOW severity |
+| Blue | `#3b82f6` | Skill set badges, volunteer charts |
+| Warm Cream | `#fefbf3` | Page background |
+
+---
+
+## License
+
+MIT
