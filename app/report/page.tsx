@@ -62,7 +62,7 @@ export default function ReportPage() {
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ title, description }),
       });
-      const { severity, action, recommended_skills } = await classifyRes.json() as { severity: string; action: string; recommended_skills: string };
+      const { severity, action, recommended_skills, classify_ms } = await classifyRes.json() as { severity: string; action: string; recommended_skills: string; classify_ms?: number };
 
       const { error: insertError } = await supabase.from("disasters").insert({
         title,
@@ -73,6 +73,7 @@ export default function ReportPage() {
         action,
         recommended_skills: recommended_skills ?? "",
         status: "ACTIVE",
+        classify_ms: classify_ms ?? null,
       });
 
       if (insertError) throw insertError;

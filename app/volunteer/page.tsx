@@ -10,6 +10,38 @@ interface LiveStats {
   incidents: number;
 }
 
+interface FormErrors {
+  name?: string;
+  phone?: string;
+  skills?: string;
+}
+
+function validatePhone(value: string): string | undefined {
+  const digits = value.replace(/\D/g, "");
+  if (digits.length < 7) return "Enter a valid phone number";
+  return undefined;
+}
+
+async function registerPush(): Promise<void> {
+  if (!("serviceWorker" in navigator) || !("PushManager" in window)) return;
+
+  const reg = await navigator.serviceWorker.register("/sw.js");
+  const permission = await Notification.requestPermission();
+  if (permission !== "granted") return;
+
+  const existing = await reg.pushManager.getSubscription();
+  const sub = existing ?? await reg.pushManager.subscribe({
+    userVisibleOnly: true,
+    applicationServerKey: process.env.NEXT_PUBLIC_VAPID_PUBLIC_KEY,
+  });
+
+  await fetch("/api/subscribe", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify(sub.toJSON()),
+  });
+}
+
 export default function VolunteerForm() {
   const [name, setName] = useState("");
   const [phone, setPhone] = useState("");
@@ -17,6 +49,8 @@ export default function VolunteerForm() {
   const [subscribed, setSubscribed] = useState(true);
   const [loading, setLoading] = useState(false);
   const [success, setSuccess] = useState(false);
+  const [submitError, setSubmitError] = useState<string | null>(null);
+  const [fieldErrors, setFieldErrors] = useState<FormErrors>({});
   const [isVisible, setIsVisible] = useState(false);
   const [liveStats, setLiveStats] = useState<LiveStats | null>(null);
   const alerts = useSupabaseAlerts();
@@ -29,20 +63,49 @@ export default function VolunteerForm() {
       .catch(() => {});
   }, []);
 
+  function validate(): FormErrors {
+    const errors: FormErrors = {};
+    if (!name.trim()) errors.name = "Name is required";
+    const phoneErr = validatePhone(phone);
+    if (phoneErr) errors.phone = phoneErr;
+    if (!skills.trim()) errors.skills = "Please describe your skills";
+    return errors;
+  }
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    setSubmitError(null);
+
+    const errors = validate();
+    if (Object.keys(errors).length > 0) {
+      setFieldErrors(errors);
+      return;
+    }
+    setFieldErrors({});
+
+    // Optimistic success
+    setSuccess(true);
     setLoading(true);
+
     try {
-      const { error: insertError } = await supabase.from("volunteers").insert({ name, phone, skills, subscribed });
-      if (insertError) throw insertError;
-      setSuccess(true);
-      setName(""); setPhone(""); setSkills("");
-      setTimeout(() => setSuccess(false), 4000);
+      const [insertResult] = await Promise.all([
+        supabase.from("volunteers").insert({ name, phone, skills, subscribed }),
+        subscribed ? registerPush().catch(() => {}) : Promise.resolve(),
+      ]);
+
+      if (insertResult.error) throw insertResult.error;
+
+      setName("");
+      setPhone("");
+      setSkills("");
+      setTimeout(() => setSuccess(false), 5000);
     } catch (err) {
       console.error(err);
-      alert("Error saving data.");
+      setSuccess(false);
+      setSubmitError("Something went wrong saving your registration. Please try again.");
+    } finally {
+      setLoading(false);
     }
-    setLoading(false);
   };
 
   return (
@@ -78,53 +141,64 @@ export default function VolunteerForm() {
           {/* Left: Form (2/3 width on md+) */}
           <div className="md:col-span-2">
             <div className="rounded-2xl p-6 lg:p-8 border" style={{ backgroundColor: 'rgba(255,255,255,0.7)', borderColor: 'rgba(193,18,31,0.2)' }}>
-              <form onSubmit={handleSubmit} className="space-y-4">
+              <form onSubmit={handleSubmit} className="space-y-4" noValidate>
 
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                  <div className="relative">
-                    <div className="absolute left-3 top-1/2 -translate-y-1/2">
-                      <User className="w-5 h-5 text-gray-400" />
+                  <div>
+                    <div className="relative">
+                      <div className="absolute left-3 top-1/2 -translate-y-1/2">
+                        <User className="w-5 h-5 text-gray-400" />
+                      </div>
+                      <input
+                        value={name}
+                        onChange={(e) => { setName(e.target.value); setFieldErrors((p) => ({ ...p, name: undefined })); }}
+                        placeholder="Full name"
+                        className="w-full pl-11 pr-4 py-3 bg-white/60 border rounded-xl text-black placeholder-gray-500 focus:outline-none transition-colors"
+                        style={{ borderColor: fieldErrors.name ? '#c1121f' : 'rgb(209 213 219)' }}
+                        onFocus={(e) => { if (!fieldErrors.name) e.currentTarget.style.borderColor = '#c1121f'; }}
+                        onBlur={(e) => { if (!fieldErrors.name) e.currentTarget.style.borderColor = 'rgb(209 213 219)'; }}
+                      />
                     </div>
-                    <input
-                      value={name}
-                      onChange={(e) => setName(e.target.value)}
-                      required
-                      placeholder="Full name"
-                      className="w-full pl-11 pr-4 py-3 bg-white/60 border border-gray-300 rounded-xl text-black placeholder-gray-500 focus:outline-none transition-colors"
-                      onFocus={(e) => e.currentTarget.style.borderColor = '#c1121f'}
-                      onBlur={(e) => e.currentTarget.style.borderColor = 'rgb(209 213 219)'}
-                    />
+                    {fieldErrors.name && <p className="mt-1 text-xs" style={{ color: '#c1121f' }}>{fieldErrors.name}</p>}
                   </div>
 
-                  <div className="relative">
-                    <div className="absolute left-3 top-1/2 -translate-y-1/2">
-                      <Phone className="w-5 h-5 text-gray-400" />
+                  <div>
+                    <div className="relative">
+                      <div className="absolute left-3 top-1/2 -translate-y-1/2">
+                        <Phone className="w-5 h-5 text-gray-400" />
+                      </div>
+                      <input
+                        value={phone}
+                        onChange={(e) => { setPhone(e.target.value); setFieldErrors((p) => ({ ...p, phone: undefined })); }}
+                        placeholder="Phone number"
+                        type="tel"
+                        className="w-full pl-11 pr-4 py-3 bg-white/60 border rounded-xl text-black placeholder-gray-500 focus:outline-none transition-colors"
+                        style={{ borderColor: fieldErrors.phone ? '#c1121f' : 'rgb(209 213 219)' }}
+                        onFocus={(e) => { if (!fieldErrors.phone) e.currentTarget.style.borderColor = '#c1121f'; }}
+                        onBlur={(e) => { if (!fieldErrors.phone) e.currentTarget.style.borderColor = 'rgb(209 213 219)'; }}
+                      />
                     </div>
-                    <input
-                      value={phone}
-                      onChange={(e) => setPhone(e.target.value)}
-                      required
-                      placeholder="Phone number"
-                      className="w-full pl-11 pr-4 py-3 bg-white/60 border border-gray-300 rounded-xl text-black placeholder-gray-500 focus:outline-none transition-colors"
-                      onFocus={(e) => e.currentTarget.style.borderColor = '#c1121f'}
-                      onBlur={(e) => e.currentTarget.style.borderColor = 'rgb(209 213 219)'}
-                    />
+                    {fieldErrors.phone && <p className="mt-1 text-xs" style={{ color: '#c1121f' }}>{fieldErrors.phone}</p>}
                   </div>
                 </div>
 
-                <div className="relative">
-                  <div className="absolute left-3 top-4">
-                    <Zap className="w-5 h-5 text-gray-400" />
+                <div>
+                  <div className="relative">
+                    <div className="absolute left-3 top-4">
+                      <Zap className="w-5 h-5 text-gray-400" />
+                    </div>
+                    <textarea
+                      value={skills}
+                      onChange={(e) => { setSkills(e.target.value); setFieldErrors((p) => ({ ...p, skills: undefined })); }}
+                      placeholder="Skills & experience (e.g., medical training, logistics, search & rescue, tech support)"
+                      rows={3}
+                      className="w-full pl-11 pr-4 py-3 bg-white/60 border rounded-xl text-black placeholder-gray-500 focus:outline-none transition-colors resize-none"
+                      style={{ borderColor: fieldErrors.skills ? '#c1121f' : 'rgb(209 213 219)' }}
+                      onFocus={(e) => { if (!fieldErrors.skills) e.currentTarget.style.borderColor = '#c1121f'; }}
+                      onBlur={(e) => { if (!fieldErrors.skills) e.currentTarget.style.borderColor = 'rgb(209 213 219)'; }}
+                    />
                   </div>
-                  <textarea
-                    value={skills}
-                    onChange={(e) => setSkills(e.target.value)}
-                    placeholder="Skills & experience (e.g., medical training, logistics, search & rescue, tech support)"
-                    rows={3}
-                    className="w-full pl-11 pr-4 py-3 bg-white/60 border border-gray-300 rounded-xl text-black placeholder-gray-500 focus:outline-none transition-colors resize-none"
-                    onFocus={(e) => e.currentTarget.style.borderColor = '#c1121f'}
-                    onBlur={(e) => e.currentTarget.style.borderColor = 'rgb(209 213 219)'}
-                  />
+                  {fieldErrors.skills && <p className="mt-1 text-xs" style={{ color: '#c1121f' }}>{fieldErrors.skills}</p>}
                 </div>
 
                 <div className="flex items-center gap-3 p-4 rounded-xl border" style={{ backgroundColor: 'rgba(193,18,31,0.08)', borderColor: 'rgba(193,18,31,0.25)' }}>
@@ -138,9 +212,15 @@ export default function VolunteerForm() {
                   />
                   <label htmlFor="alerts" className="text-sm flex items-center gap-2 text-black cursor-pointer">
                     <AlertTriangle className="w-4 h-4 flex-shrink-0" style={{ color: '#c1121f' }} />
-                    Subscribe to real-time emergency alerts
+                    Subscribe to real-time emergency alerts (push notifications to this device)
                   </label>
                 </div>
+
+                {submitError && (
+                  <div className="rounded-xl p-3 border border-red-300 bg-red-50">
+                    <p className="text-red-700 text-sm">{submitError}</p>
+                  </div>
+                )}
 
                 <button
                   type="submit"
@@ -166,22 +246,22 @@ export default function VolunteerForm() {
                     <p className="text-green-700 font-semibold text-sm">You&apos;re registered!</p>
                   </div>
                   <p className="text-green-600 text-xs">
-                    You&apos;ll receive real-time alerts for emergencies in your area. Thank you for stepping up.
+                    You&apos;ll receive push notifications for emergencies — even when this tab is closed. Thank you for stepping up.
                   </p>
                 </div>
               )}
             </div>
           </div>
 
-          {/* Right: What to expect (1/3 width on md+) */}
+          {/* Right: What to expect */}
           <div className="space-y-4">
             <div className="rounded-2xl p-6 border" style={{ backgroundColor: 'rgba(255,255,255,0.7)', borderColor: 'rgba(193,18,31,0.2)' }}>
               <h3 className="font-semibold mb-4 text-black">What to Expect</h3>
               <div className="space-y-4">
                 {[
-                  { icon: Bell, title: "Real-time alerts", desc: "Browser push notifications for emergencies in your area" },
+                  { icon: Bell, title: "Push notifications", desc: "Alerts delivered to your phone even when the browser is closed" },
                   { icon: Shield, title: "AI-triaged severity", desc: "Each alert is pre-classified so you instantly know urgency" },
-                  { icon: Smartphone, title: "No app install", desc: "Just keep the browser tab open — alerts arrive instantly" },
+                  { icon: Smartphone, title: "No app install", desc: "Works on Android Chrome and iOS Safari 16.4+ via Web Push" },
                 ].map((item, i) => {
                   const Icon = item.icon;
                   return (

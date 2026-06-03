@@ -7,6 +7,7 @@ export async function POST(req: NextRequest) {
   try {
     const { title, description } = await req.json();
 
+    const t0 = performance.now();
     const message = await client.messages.create({
       model: "claude-haiku-4-5-20251001",
       max_tokens: 200,
@@ -24,6 +25,8 @@ Respond with valid JSON only, no markdown:
       ],
     });
 
+    const classify_ms = Math.round(performance.now() - t0);
+
     const raw = (message.content[0] as { type: string; text: string }).text
       ?.trim()
       .replace(/^```(?:json)?\s*/i, "")
@@ -32,7 +35,7 @@ Respond with valid JSON only, no markdown:
     const parsed = JSON.parse(raw) as { severity: string; action: string; recommended_skills?: string };
     const validSeverities = ["CRITICAL", "HIGH", "MEDIUM", "LOW"];
     const severity = validSeverities.includes(parsed.severity) ? parsed.severity : "UNKNOWN";
-    return Response.json({ severity, action: parsed.action ?? "", recommended_skills: parsed.recommended_skills ?? "" });
+    return Response.json({ severity, action: parsed.action ?? "", recommended_skills: parsed.recommended_skills ?? "", classify_ms });
   } catch (err) {
     console.error("Classify error:", err);
     return Response.json({ severity: "UNKNOWN", action: "" }, { status: 200 });

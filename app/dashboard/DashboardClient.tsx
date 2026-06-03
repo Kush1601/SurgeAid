@@ -1,6 +1,6 @@
 "use client";
 import { useEffect, useState } from "react";
-import { BarChart2, Users, AlertTriangle, CheckCircle, TrendingUp } from "lucide-react";
+import { BarChart2, Users, AlertTriangle, CheckCircle, TrendingUp, Zap } from "lucide-react";
 
 interface DashboardData {
   severityCounts: Record<string, number>;
@@ -9,6 +9,7 @@ interface DashboardData {
   incidentsByDay: Record<string, number>;
   byHour: number[];
   totals: { disasters: number; volunteers: number };
+  latency: { p50: number | null; p95: number | null; sampleSize: number };
 }
 
 const severityColors: Record<string, string> = {
@@ -147,7 +148,7 @@ export default function DashboardClient() {
         </div>
 
         {/* KPI row */}
-        <div className={`grid grid-cols-2 sm:grid-cols-4 gap-4 mb-8 transition-all duration-700 delay-100 ${isVisible ? 'translate-y-0 opacity-100' : 'translate-y-10 opacity-0'}`}>
+        <div className={`grid grid-cols-2 sm:grid-cols-4 gap-4 mb-4 transition-all duration-700 delay-100 ${isVisible ? 'translate-y-0 opacity-100' : 'translate-y-10 opacity-0'}`}>
           {[
             { label: 'Total Incidents', value: data.totals.disasters, icon: AlertTriangle, color: '#c1121f' },
             { label: 'Volunteers', value: data.totals.volunteers, icon: Users, color: '#3b82f6' },
@@ -160,6 +161,36 @@ export default function DashboardClient() {
                 <span className="text-xs text-gray-500 font-medium">{label}</span>
               </div>
               <div className="text-2xl font-black" style={{ color }}>{value}</div>
+            </div>
+          ))}
+        </div>
+
+        {/* AI latency KPI row */}
+        <div className={`grid grid-cols-1 sm:grid-cols-3 gap-4 mb-8 transition-all duration-700 delay-150 ${isVisible ? 'translate-y-0 opacity-100' : 'translate-y-10 opacity-0'}`}>
+          {[
+            {
+              label: 'AI Classify P50',
+              value: data.latency.p50 != null ? `${data.latency.p50}ms` : '—',
+              sub: 'median latency',
+            },
+            {
+              label: 'AI Classify P95',
+              value: data.latency.p95 != null ? `${data.latency.p95}ms` : '—',
+              sub: '95th percentile',
+            },
+            {
+              label: 'Measured Incidents',
+              value: data.latency.sampleSize,
+              sub: 'with classify_ms logged',
+            },
+          ].map(({ label, value, sub }) => (
+            <div key={label} className="bg-white rounded-2xl p-4 border border-gray-100 shadow-sm">
+              <div className="flex items-center gap-2 mb-1">
+                <Zap className="w-4 h-4" style={{ color: '#f59e0b' }} />
+                <span className="text-xs text-gray-500 font-medium">{label}</span>
+              </div>
+              <div className="text-2xl font-black" style={{ color: '#f59e0b' }}>{value}</div>
+              <div className="text-xs text-gray-400 mt-0.5">{sub}</div>
             </div>
           ))}
         </div>
