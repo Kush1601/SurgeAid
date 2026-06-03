@@ -10,8 +10,8 @@
 ## What it does
 
 1. A coordinator submits an emergency at `/report`
-2. Claude AI (Haiku) classifies severity (CRITICAL / HIGH / MEDIUM / LOW) and recommends volunteer skill sets — P50 latency ~420ms
-3. All volunteers receive a **push notification on their phone within seconds** — even with the browser closed — via Web Push + Service Worker
+2. Claude AI (Haiku) classifies severity (CRITICAL / HIGH / MEDIUM / LOW) and recommends volunteer skill sets — P50 latency ~1600ms
+3. All volunteers receive a **push notification on their phone within seconds** via [ntfy](https://ntfy.sh) — works on Android and iOS, no browser required
 4. Open-browser volunteers also get a live toast alert via Supabase Realtime WebSocket
 5. The coordinator dashboard tracks incident trends, resolution rates, and AI latency metrics
 
@@ -22,14 +22,14 @@
 | Feature | Detail |
 |---|---|
 | **AI triage** | Claude Haiku classifies severity + recommends volunteer skills; classify latency tracked (P50/P95) on dashboard |
-| **Web Push** | VAPID-signed push notifications delivered to phones even when browser is closed; expired subscriptions auto-pruned |
-| **Realtime WebSocket** | Supabase broadcast sends toasts to open browser tabs in <1s |
+| **ntfy push notifications** | Delivered to phones via the ntfy app — no browser permissions, works on every platform including iOS |
+| **Realtime WebSocket** | Supabase broadcast sends severity-coded toasts to open browser tabs in <1s |
 | **Incident lifecycle** | ACTIVE → RESOLVED / FALSE_ALARM; live status on feed and map |
 | **Full-text search** | GIN index on PostgreSQL; paginated history at `/history` |
 | **Coordinator dashboard** | Severity distribution, status breakdown, 14-day trends, hour-of-day heatmap, AI latency KPI |
 | **Interactive map** | Leaflet with USGS earthquake overlay + community incidents |
 | **Auth** | Clerk protects the coordinator write path; volunteer alert-receive path is auth-free |
-| **CI** | GitHub Actions runs `npm run build` + 3 Playwright E2E specs on every push |
+| **CI** | GitHub Actions runs `npm run build` + 4 Playwright E2E specs on every push |
 
 ---
 
@@ -41,7 +41,7 @@
 | Styling | Tailwind CSS v4 | — |
 | Database | Supabase (PostgreSQL + RLS + GIN index) | Schema design, indexing, row-level security |
 | Real-time | Supabase Realtime WebSocket broadcast | Pub/sub beyond polling |
-| Push notifications | Web Push API + Service Worker + VAPID | Background delivery to phones |
+| Push notifications | ntfy (HTTP pub/sub) | Cross-platform phone delivery without browser APIs |
 | AI classification | Anthropic Claude Haiku (structured JSON output + fallback) | LLM integration with validation |
 | Auth | Clerk (Google + email) | Production-grade identity, not DIY |
 | Maps | Leaflet + React-Leaflet | — |
@@ -55,11 +55,11 @@
 
 ```
 Coordinator submits incident at /report
-  → POST /api/classify          Claude: severity + action + recommended skills (~420ms P50)
+  → POST /api/classify          Claude: severity + action + recommended skills (~1600ms P50)
   → Supabase INSERT             disasters table, status = ACTIVE
   → POST /api/trigger-alert
-      ├── Supabase Realtime broadcast  → AlertToast on open browser tabs  (<1s)
-      └── Web Push (VAPID)             → Phone notification, browser closed OK (<5s)
+      ├── Supabase Realtime broadcast  → AlertToast on open browser tabs       (<1s)
+      └── ntfy HTTP POST               → Phone notification via ntfy app        (<3s)
 ```
 
 ---
@@ -72,7 +72,7 @@ Coordinator submits incident at /report
 - [Supabase](https://supabase.com) project
 - [Clerk](https://clerk.com) application
 - Anthropic API key
-- VAPID key pair (generate below)
+- A free [ntfy](https://ntfy.sh) topic name (no account needed)
 
 ### Install
 
@@ -82,14 +82,6 @@ cd SurgeAid
 npm install
 cp .env.example .env.local
 ```
-
-### Generate VAPID keys
-
-```bash
-npx web-push generate-vapid-keys
-```
-
-Paste the output into `.env.local`.
 
 ### Environment variables
 
@@ -108,11 +100,18 @@ CLERK_SECRET_KEY=
 NEXT_PUBLIC_CLERK_SIGN_IN_URL=/sign-in
 NEXT_PUBLIC_CLERK_AFTER_SIGN_IN_URL=/report
 
-# Web Push (VAPID)
-NEXT_PUBLIC_VAPID_PUBLIC_KEY=
-VAPID_PRIVATE_KEY=
-VAPID_SUBJECT=mailto:you@example.com
+# ntfy — pick a hard-to-guess topic name (e.g. surgeaid-abc123)
+# Volunteers subscribe to this topic in the free ntfy app (ntfy.sh)
+NTFY_TOPIC=surgeaid-alerts
+NEXT_PUBLIC_NTFY_TOPIC=surgeaid-alerts
 ```
+
+### ntfy setup (volunteer notifications)
+
+1. Choose a topic name — use a hard-to-guess string like `surgeaid-k9x2m7` (topics are public on ntfy.sh)
+2. Set `NTFY_TOPIC` and `NEXT_PUBLIC_NTFY_TOPIC` in `.env.local` to that topic
+3. Volunteers open `/volunteer`, register, then install the [ntfy app](https://ntfy.sh) and subscribe to the same topic
+4. That's it — no account, no browser permissions, works on Android and iOS
 
 ### Database setup
 
@@ -144,13 +143,11 @@ SurgeAid/
 ├── app/
 │   ├── api/
 │   │   ├── classify/         # POST — AI severity + skill classification (Anthropic)
-│   │   ├── dashboard/        # GET  — Analytics: GROUP BY severity/status pushed to DB
+│   │   ├── dashboard/        # GET  — Analytics: GROUP BY severity/status via RPC
 │   │   ├── disasters/        # GET  — USGS earthquake feed proxy
 │   │   ├── search/           # GET  — Full-text search (GIN index, paginated)
 │   │   ├── stats/            # GET  — Live volunteer + incident counts
-│   │   ├── subscribe/        # POST — Save Web Push subscription
-│   │   ├── unsubscribe/      # DELETE — Remove push subscription
-│   │   ├── trigger-alert/    # POST — Realtime broadcast + Web Push delivery
+│   │   ├── trigger-alert/    # POST — Supabase Realtime broadcast + ntfy publish
 │   │   └── seed-usgs/        # POST — Admin: upsert 24h USGS earthquakes
 │   ├── components/
 │   │   ├── AlertToast.tsx    # Severity-coded realtime toast overlay
@@ -163,15 +160,13 @@ SurgeAid/
 │   ├── map/                  # /map       — Live response map
 │   ├── report/               # /report    — Submit emergency + live feed (auth required)
 │   ├── sign-in/              # /sign-in   — Clerk auth
-│   ├── volunteer/            # /volunteer — Signup + push subscription
+│   ├── volunteer/            # /volunteer — Signup + ntfy subscription instructions
 │   └── page.tsx              # Homepage with live stats
-├── public/
-│   └── sw.js                 # Service worker — handles push events
 ├── lib/
 │   ├── supabase.ts
 │   └── types.ts
 ├── supabase/migrations/      # 6 SQL migration files
-├── tests/e2e/                # 3 Playwright specs
+├── tests/e2e/                # 4 Playwright specs
 ├── .github/workflows/ci.yml  # GitHub Actions CI
 └── Dockerfile                # Multi-stage Next.js build
 ```
@@ -196,11 +191,6 @@ status text,             -- ACTIVE | RESOLVED | FALSE_ALARM
 created_at timestamptz
 ```
 
-**push_subscriptions**
-```sql
-id uuid, endpoint text (unique), p256dh text, auth text, created_at timestamptz
-```
-
 Full-text search: GIN index on `to_tsvector('english', title || ' ' || description)`
 
 ---
@@ -214,9 +204,7 @@ Full-text search: GIN index on `to_tsvector('english', title || ' ' || descripti
 | `GET` | `/api/search?q=&page=0` | Full-text incident search, paginated |
 | `GET` | `/api/dashboard` | Analytics: severity/status GROUP BY, 14-day trends, AI latency |
 | `POST` | `/api/classify` | Claude severity + action + skills; stores classify_ms |
-| `POST` | `/api/trigger-alert` | Realtime broadcast + Web Push to all subscriptions |
-| `POST` | `/api/subscribe` | Save push subscription from browser |
-| `DELETE` | `/api/unsubscribe` | Remove push subscription |
+| `POST` | `/api/trigger-alert` | Supabase Realtime broadcast + ntfy push publish |
 
 ---
 
@@ -224,7 +212,7 @@ Full-text search: GIN index on `to_tsvector('english', title || ' ' || descripti
 
 ```bash
 npx playwright install chromium   # first time only
-npm run test:e2e                  # runs 3 E2E specs
+npm run test:e2e                  # runs 4 E2E specs
 ```
 
 CI runs on every push via GitHub Actions: `npm run build` → Playwright (Chromium).

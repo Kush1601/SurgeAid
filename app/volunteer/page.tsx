@@ -1,7 +1,7 @@
 "use client";
 import { useState, useEffect } from "react";
 import { supabase } from "../../lib/supabase";
-import { Heart, Phone, User, Zap, CheckCircle, AlertTriangle, Shield, Smartphone, Bell } from 'lucide-react';
+import { Heart, Phone, User, Zap, CheckCircle, AlertTriangle, Shield, Smartphone, Bell, ExternalLink } from 'lucide-react';
 import { useSupabaseAlerts } from "../hooks/useSupabaseAlerts";
 import AlertToast from "../components/AlertToast";
 
@@ -22,25 +22,7 @@ function validatePhone(value: string): string | undefined {
   return undefined;
 }
 
-async function registerPush(): Promise<void> {
-  if (!("serviceWorker" in navigator) || !("PushManager" in window)) return;
-
-  const reg = await navigator.serviceWorker.register("/sw.js");
-  const permission = await Notification.requestPermission();
-  if (permission !== "granted") return;
-
-  const existing = await reg.pushManager.getSubscription();
-  const sub = existing ?? await reg.pushManager.subscribe({
-    userVisibleOnly: true,
-    applicationServerKey: process.env.NEXT_PUBLIC_VAPID_PUBLIC_KEY,
-  });
-
-  await fetch("/api/subscribe", {
-    method: "POST",
-    headers: { "Content-Type": "application/json" },
-    body: JSON.stringify(sub.toJSON()),
-  });
-}
+const NTFY_TOPIC = process.env.NEXT_PUBLIC_NTFY_TOPIC ?? "surgeaid-alerts";
 
 export default function VolunteerForm() {
   const [name, setName] = useState("");
@@ -88,17 +70,16 @@ export default function VolunteerForm() {
     setLoading(true);
 
     try {
-      const [insertResult] = await Promise.all([
-        supabase.from("volunteers").insert({ name, phone, skills, subscribed }),
-        subscribed ? registerPush().catch(() => {}) : Promise.resolve(),
-      ]);
+      const { error } = await supabase
+        .from("volunteers")
+        .insert({ name, phone, skills, subscribed });
 
-      if (insertResult.error) throw insertResult.error;
+      if (error) throw error;
 
       setName("");
       setPhone("");
       setSkills("");
-      setTimeout(() => setSuccess(false), 5000);
+      setTimeout(() => setSuccess(false), 6000);
     } catch (err) {
       console.error(err);
       setSuccess(false);
@@ -212,7 +193,7 @@ export default function VolunteerForm() {
                   />
                   <label htmlFor="alerts" className="text-sm flex items-center gap-2 text-black cursor-pointer">
                     <AlertTriangle className="w-4 h-4 flex-shrink-0" style={{ color: '#c1121f' }} />
-                    Subscribe to real-time emergency alerts (push notifications to this device)
+                    I will subscribe to emergency alerts via the ntfy app (see instructions →)
                   </label>
                 </div>
 
@@ -246,22 +227,89 @@ export default function VolunteerForm() {
                     <p className="text-green-700 font-semibold text-sm">You&apos;re registered!</p>
                   </div>
                   <p className="text-green-600 text-xs">
-                    You&apos;ll receive push notifications for emergencies — even when this tab is closed. Thank you for stepping up.
+                    Complete the ntfy setup on the right to start receiving emergency alerts on your phone.
                   </p>
                 </div>
               )}
             </div>
           </div>
 
-          {/* Right: What to expect */}
+          {/* Right: ntfy setup + what to expect */}
           <div className="space-y-4">
+
+            {/* ntfy setup card */}
+            <div className="rounded-2xl p-6 border" style={{ backgroundColor: 'rgba(255,255,255,0.7)', borderColor: 'rgba(193,18,31,0.2)' }}>
+              <div className="flex items-center gap-2 mb-4">
+                <Bell className="w-5 h-5" style={{ color: '#c1121f' }} />
+                <h3 className="font-semibold text-black">Get Alerts on Your Phone</h3>
+              </div>
+              <p className="text-xs text-gray-500 mb-4 leading-relaxed">
+                SurgeAid uses <strong>ntfy</strong> — a free, open-source push notification service. No account needed. Works on Android and iOS.
+              </p>
+              <ol className="space-y-3">
+                {[
+                  {
+                    step: "1",
+                    icon: Smartphone,
+                    title: "Install ntfy",
+                    desc: "Download the ntfy app from the App Store or Google Play",
+                    link: "https://ntfy.sh",
+                    linkLabel: "ntfy.sh →",
+                  },
+                  {
+                    step: "2",
+                    icon: Bell,
+                    title: `Subscribe to topic`,
+                    desc: (
+                      <>
+                        In the ntfy app, tap <strong>+</strong> and subscribe to:{" "}
+                        <code className="bg-gray-100 px-1 rounded text-xs font-mono select-all">{NTFY_TOPIC}</code>
+                      </>
+                    ),
+                  },
+                  {
+                    step: "3",
+                    icon: CheckCircle,
+                    title: "Done",
+                    desc: "You'll receive a push notification the moment an emergency is reported.",
+                  },
+                ].map(({ step, icon: Icon, title, desc, link, linkLabel }) => (
+                  <li key={step} className="flex gap-3">
+                    <div className="w-6 h-6 rounded-full flex items-center justify-center flex-shrink-0 text-xs font-bold text-white" style={{ backgroundColor: '#c1121f' }}>
+                      {step}
+                    </div>
+                    <div className="flex-1 min-w-0">
+                      <div className="flex items-center gap-1.5 mb-0.5">
+                        <Icon className="w-3.5 h-3.5 flex-shrink-0" style={{ color: '#c1121f' }} />
+                        <p className="font-medium text-sm text-black">{title}</p>
+                      </div>
+                      <p className="text-xs text-gray-600 leading-relaxed">{desc}</p>
+                      {link && (
+                        <a
+                          href={link}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="inline-flex items-center gap-1 text-xs mt-1 font-medium"
+                          style={{ color: '#c1121f' }}
+                        >
+                          {linkLabel}
+                          <ExternalLink className="w-3 h-3" />
+                        </a>
+                      )}
+                    </div>
+                  </li>
+                ))}
+              </ol>
+            </div>
+
+            {/* What to expect */}
             <div className="rounded-2xl p-6 border" style={{ backgroundColor: 'rgba(255,255,255,0.7)', borderColor: 'rgba(193,18,31,0.2)' }}>
               <h3 className="font-semibold mb-4 text-black">What to Expect</h3>
               <div className="space-y-4">
                 {[
-                  { icon: Bell, title: "Push notifications", desc: "Alerts delivered to your phone even when the browser is closed" },
-                  { icon: Shield, title: "AI-triaged severity", desc: "Each alert is pre-classified so you instantly know urgency" },
-                  { icon: Smartphone, title: "No app install", desc: "Works on Android Chrome and iOS Safari 16.4+ via Web Push" },
+                  { icon: Bell, title: "Instant alerts", desc: "Delivered to your phone within seconds of an incident report" },
+                  { icon: Shield, title: "AI-triaged severity", desc: "Each alert is pre-classified — CRITICAL, HIGH, MEDIUM, or LOW" },
+                  { icon: Smartphone, title: "Works everywhere", desc: "Android, iPhone, any browser. No browser permissions needed." },
                 ].map((item, i) => {
                   const Icon = item.icon;
                   return (
