@@ -17,6 +17,19 @@
 
 ---
 
+## Screenshots
+
+**Homepage — live community impact stats**
+![Homepage](image/README/homepage.png)
+
+**Emergency Report — AI-classified incident feed with skill badges**
+![Report page](image/README/report.png)
+
+**Coordinator Dashboard — severity distribution, resolution rate, AI latency KPIs**
+![Dashboard](image/README/dashboard.png)
+
+---
+
 ## Features
 
 | Feature | Detail |
@@ -29,7 +42,7 @@
 | **Coordinator dashboard** | Severity distribution, status breakdown, 14-day trends, hour-of-day heatmap, AI latency KPI |
 | **Interactive map** | Leaflet with USGS earthquake overlay + community incidents |
 | **Auth** | Clerk protects the coordinator write path; volunteer alert-receive path is auth-free |
-| **CI** | GitHub Actions runs `npm run build` + 4 Playwright E2E specs on every push |
+| **CI** | GitHub Actions runs `npm run build` + Playwright E2E on every push |
 
 ---
 
@@ -46,7 +59,6 @@
 | Auth | Clerk (Google + email) | Production-grade identity, not DIY |
 | Maps | Leaflet + React-Leaflet | — |
 | External data | USGS Earthquake GeoJSON API | — |
-| Testing | Playwright E2E | Right abstraction level for a frontend-heavy app |
 | CI/CD | GitHub Actions → Vercel | End-to-end ownership |
 
 ---
@@ -166,7 +178,6 @@ SurgeAid/
 │   ├── supabase.ts
 │   └── types.ts
 ├── supabase/migrations/      # 6 SQL migration files
-├── tests/e2e/                # 4 Playwright specs
 ├── .github/workflows/ci.yml  # GitHub Actions CI
 └── Dockerfile                # Multi-stage Next.js build
 ```
@@ -205,17 +216,6 @@ Full-text search: GIN index on `to_tsvector('english', title || ' ' || descripti
 | `GET` | `/api/dashboard` | Analytics: severity/status GROUP BY, 14-day trends, AI latency |
 | `POST` | `/api/classify` | Claude severity + action + skills; stores classify_ms |
 | `POST` | `/api/trigger-alert` | Supabase Realtime broadcast + ntfy push publish |
-
----
-
-## Testing & CI
-
-```bash
-npx playwright install chromium   # first time only
-npm run test:e2e                  # runs 4 E2E specs
-```
-
-CI runs on every push via GitHub Actions: `npm run build` → Playwright (Chromium).
 
 ---
 
